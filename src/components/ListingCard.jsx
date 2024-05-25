@@ -4,7 +4,7 @@ import { getImageUrl } from '@/lib/utils/images';
 
 const ListingCard = ({ listing }) => {
   return (
-    <Card>
+    <Card className='w-[320px]'>
       <img
         className='h-[200px] w-full rounded-md object-cover'
         src={getImageUrl(listing.images[0])}
