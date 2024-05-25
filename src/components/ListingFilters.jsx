@@ -8,8 +8,6 @@ const ListingFilters = ({ onChange }) => {
   const [search, setSearch] = useState('');
 
   const handleSubmit = () => {
-    // console.log({ dates, guests, search });
-    // onChange([dates, guests, search]);
     onChange({ dates, guests, search });
   };
 
@@ -20,6 +18,9 @@ const ListingFilters = ({ onChange }) => {
         placeholder='Search destinations'
         value={search}
         onChange={(e) => setSearch(e.target.value)}
+        onKeyPress={(e) => {
+          e.key === 'Enter' && handleSubmit();
+        }}
       />
       <DateRangePicker
         mode='single'
