@@ -6,7 +6,7 @@ import { get } from 'react-hook-form';
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: 'AIzaSyAiXXwdmPZy9OU4wD5jDy9L23-NlbOcOM4',
   authDomain: 'bookapp-2a36e.firebaseapp.com',
   projectId: 'bookapp-2a36e',

@@ -6,16 +6,12 @@ import {
   addDoc,
   getDocs,
   serverTimestamp,
+  query,
+  where,
 } from 'firebase/firestore';
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyAiXXwdmPZy9OU4wD5jDy9L23-NlbOcOM4',
-  authDomain: 'bookapp-2a36e.firebaseapp.com',
-  projectId: 'bookapp-2a36e',
-  storageBucket: 'bookapp-2a36e.appspot.com',
-  messagingSenderId: '628129418959',
-  appId: '1:628129418959:web:fd6f0a7cfeb30a8c12b1ba',
-};
+import { firebaseConfig } from '../../firebase';
+import '../../firebase';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -176,10 +172,38 @@ export const isListingAvailable = (listing, dates) => {
   return availableFrom <= checkIn && availableTo >= checkOut;
 };
 
-export const getAllListingsFromFirestore = async () => {
+export const getAllListingsFromFirestore = async (filters) => {
   try {
     const listingsCollection = collection(firestore, 'listings');
-    const listingsSnapshot = await getDocs(listingsCollection);
+    let listingsQuery = query(listingsCollection);
+
+    // Apply date range filter
+    if (filters.from && filters.to) {
+      listingsQuery = query(
+        listingsCollection,
+        where('availability.from', '<=', new Date(filters.to)),
+        where('availability.to', '>=', new Date(filters.from)),
+      );
+    }
+
+    // Apply guests filter
+    if (filters.guests) {
+      listingsQuery = query(
+        listingsCollection,
+        where('maxGuests', '>=', filters.guests),
+      );
+    }
+
+    // Apply search value filter
+    if (filters.search) {
+      listingsQuery = query(
+        listingsCollection,
+        where('name', '==', filters.search),
+      );
+      // You can add more fields to search in as needed
+    }
+
+    const listingsSnapshot = await getDocs(listingsQuery);
     const listingsList = listingsSnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
