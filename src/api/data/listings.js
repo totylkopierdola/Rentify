@@ -1,19 +1,42 @@
 import { addDays, startOfDay } from 'date-fns';
+import { initializeApp } from 'firebase/app';
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  serverTimestamp,
+} from 'firebase/firestore';
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyAiXXwdmPZy9OU4wD5jDy9L23-NlbOcOM4',
+  authDomain: 'bookapp-2a36e.firebaseapp.com',
+  projectId: 'bookapp-2a36e',
+  storageBucket: 'bookapp-2a36e.appspot.com',
+  messagingSenderId: '628129418959',
+  appId: '1:628129418959:web:fd6f0a7cfeb30a8c12b1ba',
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+// Initialize Firestore
+const firestore = getFirestore(app);
 
 const startOfToday = startOfDay(new Date());
 
-export const createListing = (listing) => {
+const createListing = (listing) => {
   const {
-    availability,
-    description,
-    guestFavorite,
+    availability = { from: startOfToday, to: addDays(startOfToday, 7) }, // Default availability
+    description = '', // Default to empty string if undefined
+    guestFavorite = false, // Default to false if undefined
     id,
-    maxGuests,
-    name,
+    maxGuests = 1, // Default to 1 if undefined
+    name = '', // Default to empty string if undefined
     locationId,
-    images,
-    price,
-    rating,
+    images = [], // Default to empty array if undefined
+    price = 0, // Default to 0 if undefined
+    rating = 0, // Default to 0 if undefined
   } = listing;
 
   return {
@@ -32,31 +55,7 @@ export const createListing = (listing) => {
   };
 };
 
-export const isListingAvailable = (listing, dates) => {
-  const { availability } = listing;
-  const availableFrom = new Date(availability.from);
-  const availableTo = new Date(availability.to);
-  const { from: checkIn, to: checkOut } = dates;
-
-  // If there are no bounds, return true
-  if (!checkIn && !checkOut) {
-    return true;
-  }
-
-  // Handles check-in only
-  if (checkIn && !checkOut) {
-    return checkIn >= availableFrom && checkIn <= availableTo;
-  }
-
-  // Handles check-out only
-  if (!checkIn && checkOut) {
-    return checkOut <= availableTo && checkOut >= availableFrom;
-  }
-
-  return availableFrom <= checkIn && availableTo >= checkOut;
-};
-
-export const listings = [
+const listings = [
   createListing({
     id: 1,
     name: 'Cozy Apartment in London',
@@ -123,24 +122,19 @@ With its central location, modern amenities, and comfortable furnishings, this a
       'listing3-2.jpg',
       'listing3-3.jpg',
       'listing3-4.jpg',
-      'listing3-5.jpg',
-      'listing3-6.jpg',
-      'listing3-7.jpg',
     ],
-    price: 150,
+    price: 200,
     maxGuests: 6,
     availability: {
       from: startOfToday,
-      to: addDays(startOfToday, 21),
+      to: addDays(startOfToday, 30),
     },
   }),
   createListing({
     id: 4,
     name: 'Stylish Loft in Paris',
     description: `This stylish loft is located in the heart of Paris, just a few minutes' walk from the Louvre Museum and the Pompidou Center. It is also close to many restaurants, cafes, and shops.
-
-    The loft is located in the heart of Paris, just a few minutes' walk from the Louvre Museum and the Pompidou Center. It is also close to many restaurants, cafes, and shops.
-
+    
     The loft is located on the 3rd floor of a building with an elevator. It has a living room with a sofa bed, a kitchenette, and a bathroom with a shower and toilet. The loft is equipped with a TV, a DVD player, and a washing machine.`,
     locationId: 2,
     images: [
@@ -148,219 +142,83 @@ With its central location, modern amenities, and comfortable furnishings, this a
       'listing4-2.jpg',
       'listing4-3.jpg',
       'listing4-4.jpg',
-      'listing4-5.jpg',
-      'listing4-6.jpg',
-      'listing4-7.jpg',
-    ],
-    price: 80,
-    maxGuests: 8,
-    availability: {
-      from: startOfToday,
-      to: addDays(startOfToday, 28),
-    },
-  }),
-  createListing({
-    id: 5,
-    name: 'Modern Apartment in London',
-    description: `This modern apartment is located in the heart of London, just a few minutes' walk from the nearest metro station. It has a large living room with a fireplace, a fully equipped kitchen, and a dining area. The apartment has two bedrooms and two bathrooms.
-
-    The apartment is located in a quiet residential area, but it is still close to many restaurants, cafes, and shops. It is also close to the British Museum and the National Gallery.
-
-    If you need any help during your stay, we will be happy to assist you. We look forward to welcoming you to London!`,
-    locationId: 1,
-    images: [
-      'listing5-1.jpg',
-      'listing5-2.jpg',
-      'listing5-3.jpg',
-      'listing5-4.jpg',
-      'listing5-5.jpg',
-      'listing5-6.jpg',
-      'listing5-7.jpg',
-    ],
-    price: 90,
-    maxGuests: 4,
-    availability: {
-      from: startOfToday,
-      to: addDays(startOfToday, 7),
-    },
-  }),
-  createListing({
-    id: 6,
-    name: 'Cozy Cottage in Paris',
-    description: `This cozy cottage is located in the heart of Paris, just a few minutes' walk from the Louvre Museum and the Pompidou Center. It is also close to many restaurants, cafes, and shops.
-
-    One of the many advantages of this cottage is that it is located in a quiet residential area, but it is still close to many restaurants, cafes, and shops. It is also close to the British Museum and the National Gallery.
-
-    The cottage is located on the 3rd floor of a building with an elevator. It has a living room with a sofa bed, a kitchenette, and a bathroom with a shower and toilet. The cottage is equipped with a TV, a DVD player, and a washing machine.`,
-    locationId: 2,
-    images: [
-      'listing6-1.jpg',
-      'listing6-2.jpg',
-      'listing6-3.jpg',
-      'listing6-4.jpg',
-      'listing6-5.jpg',
-      'listing6-6.jpg',
-      'listing6-7.jpg',
-    ],
-    price: 110,
-    maxGuests: 16,
-    availability: {
-      from: startOfToday,
-      to: addDays(startOfToday, 14),
-    },
-  }),
-  createListing({
-    id: 7,
-    name: 'Luxury Villa in London',
-    description: `This beautiful and spacious villa is located in the heart of London, just a stone's throw away from all the major attractions and landmarks. With its modern and stylish decor, this villa is the perfect choice for anyone looking for a comfortable and convenient stay in the city.
-
-The villa features a large living room with plenty of natural light, a fully equipped kitchen with all the necessary appliances, and a cozy bedroom with a comfortable bed and high-quality linens. The bathroom is modern and clean, with a large shower and plenty of towels provided.
-
-Located just a few minutes' walk from the nearest metro station, this villa is perfectly situated for exploring all that London has to offer. Whether you're here for business or pleasure, this villa is the ideal base for your stay in the city.
-
-With its central location, modern amenities, and comfortable furnishings, this villa is sure to make your stay in London a memorable one. Book now and experience the best that the city has to offer!`,
-    locationId: 1,
-    images: [
-      'listing7-1.jpg',
-      'listing7-2.jpg',
-      'listing7-3.jpg',
-      'listing7-4.jpg',
-      'listing7-5.jpg',
-      'listing7-6.jpg',
-      'listing7-7.jpg',
-    ],
-    price: 100,
-    maxGuests: 20,
-    availability: {
-      from: startOfToday,
-      to: addDays(startOfToday, 21),
-    },
-  }),
-  createListing({
-    id: 8,
-    name: 'Charming Houseboat in Paris',
-    description: `This charming houseboat is located in the heart of Paris, just a few minutes' walk from the Louvre Museum and the Pompidou Center. It is also close to many restaurants, cafes, and shops.
-
-    The houseboat is located in the heart of Paris, just a few minutes' walk from the Louvre Museum and the Pompidou Center. It is also close to many restaurants, cafes, and shops.
-
-    The houseboat is located on the 3rd floor of a building with an elevator. It has a living room with a sofa bed, a kitchenette, and a bathroom with a shower and toilet. The houseboat is equipped with a TV, a DVD player, and a washing machine.`,
-    locationId: 2,
-    images: [
-      'listing8-1.jpg',
-      'listing8-2.jpg',
-      'listing8-3.jpg',
-      'listing8-4.jpg',
-      'listing8-5.jpg',
-      'listing8-6.jpg',
-      'listing8-7.jpg',
-    ],
-    price: 120,
-    maxGuests: 10,
-    availability: {
-      from: startOfToday,
-      to: addDays(startOfToday, 28),
-    },
-  }),
-  createListing({
-    id: 9,
-    name: 'Sunny Apartment in London',
-    description: `This spacious apartment is located in the heart of London, just a few minutes' walk from the nearest metro station. It has a large living room with a fireplace, a fully equipped kitchen, and a dining area. The apartment has three bedrooms and two bathrooms.
-
-    The apartment is located in a quiet residential area, but it is still close to many restaurants, cafes, and shops. It is also close to the British Museum and the National Gallery.
-
-    One of the bedrooms has a double bed, while the other two have twin beds. The apartment is equipped with a TV, a DVD player, and a washing machine.
-
-    If you need any help during your stay, we will be happy to assist you. We look forward to welcoming you to London!`,
-    locationId: 1,
-    images: [
-      'listing9-1.jpg',
-      'listing9-2.jpg',
-      'listing9-3.jpg',
-      'listing9-4.jpg',
-      'listing9-5.jpg',
-      'listing9-6.jpg',
-      'listing9-7.jpg',
     ],
     price: 150,
-    maxGuests: 6,
+    maxGuests: 3,
     availability: {
       from: startOfToday,
-      to: addDays(startOfToday, 7),
-    },
-  }),
-  createListing({
-    id: 10,
-    name: 'Cozy Studio in Paris',
-    description: `This stylish studio is located in the heart of Paris, just a few minutes' walk from the Louvre Museum and the Pompidou Center. It is also close to many restaurants, cafes, and shops.
-
-    The studio is located in the heart of Paris, just a few minutes' walk from the Louvre Museum and the Pompidou Center. It is also close to many restaurants, cafes, and shops.
-
-    The studio is located on the 3rd floor of a building with an elevator. It has a living room with a sofa bed, a kitchenette, and a bathroom with a shower and toilet. The studio is equipped with a TV, a DVD player, and a washing machine.`,
-    locationId: 2,
-    images: [
-      'listing10-1.jpg',
-      'listing10-2.jpg',
-      'listing10-3.jpg',
-      'listing10-4.jpg',
-      'listing10-5.jpg',
-      'listing10-6.jpg',
-      'listing10-7.jpg',
-    ],
-    price: 80,
-    maxGuests: 2,
-    availability: {
-      from: startOfToday,
-      to: addDays(startOfToday, 14),
-    },
-  }),
-  createListing({
-    id: 11,
-    name: 'Spacious House in London',
-    description: `This modern house is located in the heart of London, just a few minutes' walk from the nearest metro station. It has a large living room with a fireplace, a fully equipped kitchen, and a dining area. The house has two bedrooms and two bathrooms.
-
-    The house is located in a quiet residential area, but it is still close to many restaurants, cafes, and shops. It is also close to the British Museum and the National Gallery.
-
-    If you need any help during your stay, we will be happy to assist you. We look forward to welcoming you to London!`,
-    locationId: 1,
-    images: [
-      'listing11-1.jpg',
-      'listing11-2.jpg',
-      'listing11-3.jpg',
-      'listing11-4.jpg',
-      'listing11-5.jpg',
-      'listing11-6.jpg',
-      'listing11-7.jpg',
-    ],
-    price: 90,
-    maxGuests: 4,
-    availability: {
-      from: startOfToday,
-      to: addDays(startOfToday, 21),
-    },
-  }),
-  createListing({
-    id: 12,
-    name: 'Stylish Loft in Paris',
-    description: `This cozy loft is located in the heart of Paris, just a few minutes' walk from the Louvre Museum and the Pompidou Center. It is also close to many restaurants, cafes, and shops.
-
-    One of the many advantages of this loft is that it is located in a quiet residential area, but it is still close to many restaurants, cafes, and shops. It is also close to the British Museum and the National Gallery.
-
-    The loft is located on the 3rd floor of a building with an elevator. It has a living room with a sofa bed, a kitchenette, and a bathroom with a shower and toilet. The loft is equipped with a TV, a DVD player, and a washing machine.`,
-    locationId: 2,
-    images: [
-      'listing12-1.jpg',
-      'listing12-2.jpg',
-      'listing12-3.jpg',
-      'listing12-4.jpg',
-      'listing12-5.jpg',
-      'listing12-6.jpg',
-      'listing12-7.jpg',
-    ],
-    price: 110,
-    maxGuests: 8,
-    availability: {
-      from: startOfToday,
-      to: addDays(startOfToday, 28),
+      to: addDays(startOfToday, 10),
     },
   }),
 ];
+
+export const isListingAvailable = (listing, dates) => {
+  const { availability } = listing;
+  const availableFrom = new Date(availability.from.toDate());
+  const availableTo = new Date(availability.to.toDate());
+  const { from: checkIn, to: checkOut } = dates;
+
+  // If there are no bounds, return true
+  if (!checkIn && !checkOut) {
+    return true;
+  }
+
+  // Handles check-in only
+  if (checkIn && !checkOut) {
+    return checkIn >= availableFrom && checkIn <= availableTo;
+  }
+
+  // Handles check-out only
+  if (!checkIn && checkOut) {
+    return checkOut <= availableTo && checkOut >= availableFrom;
+  }
+
+  return availableFrom <= checkIn && availableTo >= checkOut;
+};
+
+export const getAllListingsFromFirestore = async () => {
+  try {
+    const listingsCollection = collection(firestore, 'listings');
+    const listingsSnapshot = await getDocs(listingsCollection);
+    const listingsList = listingsSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    console.log(listingsList);
+    return listingsList;
+  } catch (error) {
+    console.error('Error getting listings: ', error);
+    throw error;
+  }
+};
+
+const createListingInFirestore = async (listing) => {
+  try {
+    const docRef = await addDoc(collection(firestore, 'listings'), {
+      ...listing,
+      createdAt: serverTimestamp(),
+      modifiedAt: serverTimestamp(),
+    });
+    console.log('Document written with ID: ', docRef.id);
+    return docRef.id; // Return the ID of the newly created document
+  } catch (error) {
+    console.error('Error adding document: ', error);
+    throw error;
+  }
+};
+
+// Function to add all listings to Firestore
+// const addAllListingsToFirestore = async () => {
+//   for (const listing of listings) {
+//     try {
+//       await createListingInFirestore(listing);
+//     } catch (error) {
+//       console.error('Error adding listing to Firestore: ', error);
+//     }
+//   }
+// };
+
+// addAllListingsToFirestore();
+
+// Export listings for external use
+export { listings };
