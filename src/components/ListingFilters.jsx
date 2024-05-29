@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button, DateRangePicker, Input, Stepper } from '@/components/ui';
 import { Search } from 'lucide-react';
 
-const ListingFilters = ({ onChange }) => {
+const ListingFilters = ({ onChange, isLoading }) => {
   const [dates, setDates] = useState();
   const [guests, setGuests] = useState(0);
   const [search, setSearch] = useState('');
@@ -26,15 +26,23 @@ const ListingFilters = ({ onChange }) => {
         onKeyPress={(e) => {
           e.key === 'Enter' && handleSubmit();
         }}
+        disabled={isLoading}
       />
+
       <DateRangePicker
         mode='single'
         value={dates}
         onChange={setDates}
         minDate={new Date()}
         placeholder='Add dates'
+        disabled={isLoading}
       />
-      <Stepper label='guest' value={guests} onChange={setGuests} />
+      <Stepper
+        label='guest'
+        value={guests}
+        onChange={setGuests}
+        disabled={isLoading}
+      />
       <Button onClick={handleSubmit}>
         <Search className='h-4 w-4' />
       </Button>

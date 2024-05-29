@@ -171,8 +171,18 @@ export const isListingAvailable = (listing, dates) => {
 
   return availableFrom <= checkIn && availableTo >= checkOut;
 };
+let currentAbortController = null;
 
 export const getAllListingsFromFirestore = async (filters) => {
+  // Abort the previous request if it exists
+  if (currentAbortController) {
+    currentAbortController.abort();
+  }
+
+  // Create a new AbortController for the current request
+  currentAbortController = new AbortController();
+  const { signal } = currentAbortController;
+
   try {
     const listingsCollection = collection(firestore, 'listings');
     let listingsQuery = query(listingsCollection);
@@ -200,19 +210,25 @@ export const getAllListingsFromFirestore = async (filters) => {
         listingsCollection,
         where('name', '==', filters.search),
       );
-      // You can add more fields to search in as needed
     }
 
-    const listingsSnapshot = await getDocs(listingsQuery);
+    const listingsSnapshot = await getDocs(listingsQuery, { signal });
     const listingsList = listingsSnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
-    console.log(listingsList);
+
     return listingsList;
   } catch (error) {
-    console.error('Error getting listings: ', error);
-    throw error;
+    if (error.name === 'AbortError') {
+      console.log('Previous request aborted');
+    } else {
+      console.error('Error getting listings: ', error);
+      throw error;
+    }
+  } finally {
+    // Reset the AbortController once the operation is done
+    currentAbortController = null;
   }
 };
 

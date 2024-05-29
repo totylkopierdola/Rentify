@@ -34,7 +34,7 @@ const HomePage = () => {
           setError(error.message);
           setIsLoading(false);
         });
-    }, 4000);
+    }, 2000);
   }, [filters]);
 
   const renderListingList = () => {
@@ -58,8 +58,11 @@ const HomePage = () => {
       <h1>{error}</h1>
       <button onClick={() => console.log(listings)}>zxc</button>
       <div className='mb-4'>
-        <ListingFilters onChange={handleFilters} />
+        <ListingFilters onChange={handleFilters} isLoading={isLoading} />
         <Separator className='my-4' />
+        <h2 onClick={() => console.log(isLoading)}>
+          isLoading: {isLoading.toString()}
+        </h2>
       </div>
       {renderListingList()}
     </div>

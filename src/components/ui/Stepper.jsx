@@ -4,11 +4,11 @@ import { Button } from '@/components/ui';
 import { cn } from '@/lib/utils/cn';
 
 const Stepper = React.forwardRef(
-  ({ className, label, onChange, value, ...props }, ref) => {
+  ({ className, label, onChange, value, disabled, ...props }, ref) => {
     return (
       <div
         className={cn(
-          'flex h-10 min-w-[190px] items-center justify-between gap-2 rounded-md border border-input bg-background py-2 text-sm',
+          `${disabled && 'pointer-events-none opacity-50'} flex h-10 min-w-[190px] items-center justify-between gap-2 rounded-md border border-input bg-background py-2 text-sm`,
           className,
         )}
       >

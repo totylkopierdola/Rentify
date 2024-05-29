@@ -18,6 +18,7 @@ export const DateRangePicker = ({
   onChange,
   placeholder,
   value,
+  disabled,
 }) => {
   const handleDatesChange = (dates) => {
     onChange(dates);
@@ -30,6 +31,7 @@ export const DateRangePicker = ({
           <Button
             id='date'
             variant='outline'
+            disabled={disabled}
             className={cn(
               'w-[250px] justify-start text-left font-normal',
               !value && 'text-muted-foreground',
@@ -62,6 +64,7 @@ export const DateRangePicker = ({
             numberOfMonths={2}
             fromDate={minDate}
             toDate={maxDate}
+            disabled={disabled}
           />
         </PopoverContent>
       </Popover>
