@@ -3,6 +3,8 @@ import { initializeApp } from 'firebase/app';
 import {
   getFirestore,
   collection,
+  doc,
+  getDoc,
   addDoc,
   getDocs,
   serverTimestamp,
@@ -172,6 +174,49 @@ export const isListingAvailable = (listing, dates) => {
   return availableFrom <= checkIn && availableTo >= checkOut;
 };
 let currentAbortController = null;
+
+export const getSingleListingFromFirestore = async (listingId) => {
+  if (!listingId) {
+    throw new Error('listingId is required to fetch a single listing');
+  }
+
+  // Abort the previous request if it exists
+  if (currentAbortController) {
+    currentAbortController.abort();
+  }
+
+  // Create a new AbortController for the current request
+  currentAbortController = new AbortController();
+  const { signal } = currentAbortController;
+
+  try {
+    // Fetch data for the specific listing using the `id` field
+    const listingsCollection = collection(firestore, 'listings');
+    const listingQuery = query(
+      listingsCollection,
+      where('id', '==', Number(listingId)),
+    );
+    const querySnapshot = await getDocs(listingQuery, { signal });
+
+    if (!querySnapshot.empty) {
+      // Assuming `id` is unique, we take the first document
+      const listingDoc = querySnapshot.docs[0];
+      return { id: listingDoc.id, ...listingDoc.data() };
+    } else {
+      throw new Error('Listing not found');
+    }
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      console.log('Previous request aborted');
+    } else {
+      console.error('Error getting listing: ', error);
+      throw error;
+    }
+  } finally {
+    // Reset the AbortController once the operation is done
+    currentAbortController = null;
+  }
+};
 
 export const getAllListingsFromFirestore = async (filters) => {
   // Abort the previous request if it exists

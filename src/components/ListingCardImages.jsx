@@ -31,8 +31,12 @@ const ListingCardImages = ({ listing }) => {
       </CarouselContent>
       {isHovering && (
         <>
-          <CarouselPrevious className='absolute left-4' />
-          <CarouselNext className='absolute right-4' />
+          <CarouselPrevious
+            className={`absolute left-4 ${isHovering ? 'animate-fadeIn' : 'animate-fadeOut'}`}
+          />
+          <CarouselNext
+            className={`absolute right-4 ${isHovering ? 'animate-fadeIn' : 'animate-fadeOut'}`}
+          />
         </>
       )}
     </Carousel>

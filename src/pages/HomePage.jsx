@@ -24,17 +24,15 @@ const HomePage = () => {
   useEffect(() => {
     setIsLoading(true);
 
-    setTimeout(() => {
-      getAllListingsFromFirestore(filters)
-        .then((listings) => {
-          setListings(listings);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          setError(error.message);
-          setIsLoading(false);
-        });
-    }, 2000);
+    getAllListingsFromFirestore(filters)
+      .then((listings) => {
+        setListings(listings);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setError(error.message);
+        setIsLoading(false);
+      });
   }, [filters]);
 
   const renderListingList = () => {
