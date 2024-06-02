@@ -1,30 +1,16 @@
-import { getListingsFromFirestore } from '@/api/data/listings';
+import { getListingDataFromFirestore } from '@/api/data/listings';
 import { useEffect, useState } from 'react';
 import { Spinner } from '@/components/ui';
 import { useParams } from 'react-router-dom';
+import useData from '@/hooks/useData';
+
 import ListingDetailsCard from '@/components/ListingDetailsCard';
 
 const ListingDetailsPage = () => {
-  const [listing, setListing] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
   const params = useParams();
   const listingId = params.listingId;
 
-  useEffect(() => {
-    setIsLoading(true);
-
-    getListingsFromFirestore(params.listingId)
-      .then((listing) => {
-        setListing(listing);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        setError(error.message);
-        setIsLoading(false);
-      });
-  }, []);
+  const { data: listing, error, isLoading } = useData(listingId);
 
   const renderListing = () => {
     if (isLoading) {

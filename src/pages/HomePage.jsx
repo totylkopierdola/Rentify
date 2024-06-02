@@ -1,13 +1,11 @@
 import ListingList from '@/components/ListingList';
-import { getListingsFromFirestore } from '@/api/data/listings';
+import { getListingDataFromFirestore } from '@/api/data/listings';
 import { useEffect, useState } from 'react';
 import ListingFilters from '@/components/ListingFilters';
 import { Separator, Spinner } from '@/components/ui';
+import useData from '@/hooks/useData';
 
 const HomePage = () => {
-  const [listings, setListings] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
     dates: undefined,
     guests: 0,
@@ -18,19 +16,7 @@ const HomePage = () => {
     setFilters(filters);
   };
 
-  useEffect(() => {
-    setIsLoading(true);
-
-    getListingsFromFirestore(filters)
-      .then((listings) => {
-        setListings(listings);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        setError(error.message);
-        setIsLoading(false);
-      });
-  }, [filters]);
+  const { data: listings, error, isLoading } = useData(filters);
 
   const renderListingList = () => {
     if (isLoading) {

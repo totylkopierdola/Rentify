@@ -175,7 +175,7 @@ export const isListingAvailable = (listing, dates) => {
 };
 let currentAbortController = null;
 
-export const getListingsFromFirestore = async (filtersOrId) => {
+export const getListingDataFromFirestore = async (filtersOrId) => {
   try {
     const listingsCollection = collection(firestore, 'listings');
     let listingsQuery;
