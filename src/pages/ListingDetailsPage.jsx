@@ -1,4 +1,4 @@
-import { getSingleListingFromFirestore } from '@/api/data/listings';
+import { getListingsFromFirestore } from '@/api/data/listings';
 import { useEffect, useState } from 'react';
 import { Spinner } from '@/components/ui';
 import { useParams } from 'react-router-dom';
@@ -15,7 +15,7 @@ const ListingDetailsPage = () => {
   useEffect(() => {
     setIsLoading(true);
 
-    getSingleListingFromFirestore(params.listingId)
+    getListingsFromFirestore(params.listingId)
       .then((listing) => {
         setListing(listing);
         setIsLoading(false);

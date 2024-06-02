@@ -175,61 +175,47 @@ export const isListingAvailable = (listing, dates) => {
 };
 let currentAbortController = null;
 
-export const getSingleListingFromFirestore = async (listingId) => {
-  if (!listingId) {
-    throw new Error('listingId is required to fetch a single listing');
-  }
-
+export const getListingsFromFirestore = async (filtersOrId) => {
   try {
-    // Fetch data for the specific listing using the `id` field
     const listingsCollection = collection(firestore, 'listings');
-    const listingQuery = query(
-      listingsCollection,
-      where('id', '==', Number(listingId)),
-    );
-    const querySnapshot = await getDocs(listingQuery);
+    let listingsQuery;
 
-    if (!querySnapshot.empty) {
-      // Assuming `id` is unique, we take the first document
-      const listingDoc = querySnapshot.docs[0];
-      return { id: listingDoc.id, ...listingDoc.data() };
+    if (typeof filtersOrId === 'object') {
+      // Fetch all listings based on filters
+      const filters = filtersOrId;
+      listingsQuery = query(listingsCollection);
+
+      // Apply date range filter
+      if (filters.from && filters.to) {
+        listingsQuery = query(
+          listingsCollection,
+          where('availability.from', '<=', new Date(filters.to)),
+          where('availability.to', '>=', new Date(filters.from)),
+        );
+      }
+
+      // Apply guests filter
+      if (filters.guests) {
+        listingsQuery = query(
+          listingsCollection,
+          where('maxGuests', '>=', filters.guests),
+        );
+      }
+
+      // Apply search value filter
+      if (filters.search) {
+        listingsQuery = query(
+          listingsCollection,
+          where('name', '>=', filters.search),
+          where('name', '<=', filters.search + '\uf8ff'),
+        );
+      }
     } else {
-      throw new Error('Listing not found');
-    }
-  } catch (error) {
-    console.error('Error getting listing: ', error);
-    throw error;
-  }
-};
-
-export const getAllListingsFromFirestore = async (filters) => {
-  try {
-    const listingsCollection = collection(firestore, 'listings');
-    let listingsQuery = query(listingsCollection);
-
-    // Apply date range filter
-    if (filters.from && filters.to) {
+      // Fetch a single listing based on listingId
+      const listingId = filtersOrId;
       listingsQuery = query(
         listingsCollection,
-        where('availability.from', '<=', new Date(filters.to)),
-        where('availability.to', '>=', new Date(filters.from)),
-      );
-    }
-
-    // Apply guests filter
-    if (filters.guests) {
-      listingsQuery = query(
-        listingsCollection,
-        where('maxGuests', '>=', filters.guests),
-      );
-    }
-
-    // Apply search value filter
-    if (filters.search) {
-      listingsQuery = query(
-        listingsCollection,
-        where('name', '>=', filters.search),
-        where('name', '<=', filters.search + '\uf8ff'),
+        where('id', '==', Number(listingId)),
       );
     }
 
@@ -239,7 +225,13 @@ export const getAllListingsFromFirestore = async (filters) => {
       ...doc.data(),
     }));
 
-    return listingsList;
+    if (listingsList.length === 1 && typeof filtersOrId === 'string') {
+      // If only one listing is found and listingId is provided, return the single listing
+      return listingsList[0];
+    } else {
+      // Otherwise, return the list of listings
+      return listingsList;
+    }
   } catch (error) {
     console.error('Error getting listings: ', error);
     throw error;

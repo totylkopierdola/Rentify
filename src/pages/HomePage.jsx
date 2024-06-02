@@ -1,9 +1,5 @@
 import ListingList from '@/components/ListingList';
-import {
-  isListingAvailable,
-  getAllListingsFromFirestore,
-  // getListingsFromFirestore,
-} from '@/api/data/listings';
+import { getListingsFromFirestore } from '@/api/data/listings';
 import { useEffect, useState } from 'react';
 import ListingFilters from '@/components/ListingFilters';
 import { Separator, Spinner } from '@/components/ui';
@@ -25,7 +21,7 @@ const HomePage = () => {
   useEffect(() => {
     setIsLoading(true);
 
-    getAllListingsFromFirestore(filters)
+    getListingsFromFirestore(filters)
       .then((listings) => {
         setListings(listings);
         setIsLoading(false);
