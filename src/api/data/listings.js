@@ -180,15 +180,6 @@ export const getSingleListingFromFirestore = async (listingId) => {
     throw new Error('listingId is required to fetch a single listing');
   }
 
-  // Abort the previous request if it exists
-  if (currentAbortController) {
-    currentAbortController.abort();
-  }
-
-  // Create a new AbortController for the current request
-  currentAbortController = new AbortController();
-  const { signal } = currentAbortController;
-
   try {
     // Fetch data for the specific listing using the `id` field
     const listingsCollection = collection(firestore, 'listings');
@@ -196,7 +187,7 @@ export const getSingleListingFromFirestore = async (listingId) => {
       listingsCollection,
       where('id', '==', Number(listingId)),
     );
-    const querySnapshot = await getDocs(listingQuery, { signal });
+    const querySnapshot = await getDocs(listingQuery);
 
     if (!querySnapshot.empty) {
       // Assuming `id` is unique, we take the first document
@@ -206,28 +197,12 @@ export const getSingleListingFromFirestore = async (listingId) => {
       throw new Error('Listing not found');
     }
   } catch (error) {
-    if (error.name === 'AbortError') {
-      console.log('Previous request aborted');
-    } else {
-      console.error('Error getting listing: ', error);
-      throw error;
-    }
-  } finally {
-    // Reset the AbortController once the operation is done
-    currentAbortController = null;
+    console.error('Error getting listing: ', error);
+    throw error;
   }
 };
 
 export const getAllListingsFromFirestore = async (filters) => {
-  // Abort the previous request if it exists
-  if (currentAbortController) {
-    currentAbortController.abort();
-  }
-
-  // Create a new AbortController for the current request
-  currentAbortController = new AbortController();
-  const { signal } = currentAbortController;
-
   try {
     const listingsCollection = collection(firestore, 'listings');
     let listingsQuery = query(listingsCollection);
@@ -253,11 +228,12 @@ export const getAllListingsFromFirestore = async (filters) => {
     if (filters.search) {
       listingsQuery = query(
         listingsCollection,
-        where('name', '==', filters.search),
+        where('name', '>=', filters.search),
+        where('name', '<=', filters.search + '\uf8ff'),
       );
     }
 
-    const listingsSnapshot = await getDocs(listingsQuery, { signal });
+    const listingsSnapshot = await getDocs(listingsQuery);
     const listingsList = listingsSnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
@@ -265,15 +241,8 @@ export const getAllListingsFromFirestore = async (filters) => {
 
     return listingsList;
   } catch (error) {
-    if (error.name === 'AbortError') {
-      console.log('Previous request aborted');
-    } else {
-      console.error('Error getting listings: ', error);
-      throw error;
-    }
-  } finally {
-    // Reset the AbortController once the operation is done
-    currentAbortController = null;
+    console.error('Error getting listings: ', error);
+    throw error;
   }
 };
 

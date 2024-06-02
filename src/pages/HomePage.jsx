@@ -2,6 +2,7 @@ import ListingList from '@/components/ListingList';
 import {
   isListingAvailable,
   getAllListingsFromFirestore,
+  // getListingsFromFirestore,
 } from '@/api/data/listings';
 import { useEffect, useState } from 'react';
 import ListingFilters from '@/components/ListingFilters';

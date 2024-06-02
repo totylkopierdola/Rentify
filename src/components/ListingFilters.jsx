@@ -43,7 +43,7 @@ const ListingFilters = ({ onChange, isLoading }) => {
         onChange={setGuests}
         disabled={isLoading}
       />
-      <Button onClick={handleSubmit}>
+      <Button disabled={isLoading} onClick={handleSubmit}>
         <Search className='h-4 w-4' />
       </Button>
     </div>
