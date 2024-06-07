@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { Button, DateRangePicker, Input, Stepper } from '@/components/ui';
 import { Search } from 'lucide-react';
 
@@ -6,11 +6,6 @@ const ListingFilters = ({ onChange, isLoading }) => {
   const [dates, setDates] = useState();
   const [guests, setGuests] = useState(0);
   const [search, setSearch] = useState('');
-
-  // Log date changes
-  useEffect(() => {
-    console.log('Selected dates:', dates);
-  }, [dates]);
 
   const handleSubmit = () => {
     onChange({ dates, guests, search });
@@ -50,4 +45,4 @@ const ListingFilters = ({ onChange, isLoading }) => {
   );
 };
 
-export default ListingFilters;
+export default memo(ListingFilters);

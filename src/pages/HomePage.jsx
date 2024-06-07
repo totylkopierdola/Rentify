@@ -1,9 +1,11 @@
 import ListingList from '@/components/ListingList';
-import { getListingDataFromFirestore } from '@/api/data/listings';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ListingFilters from '@/components/ListingFilters';
-import { Separator, Spinner } from '@/components/ui';
-import useData from '@/hooks/useData';
+import { Separator } from '@/components/ui';
+// import useData from '@/hooks/useData';
+import DataRenderer from '@/components/DataRendered';
+import { useSelector, useDispatch } from 'react-redux';
+import { getListings } from '../state/listings/listingsSlice';
 
 const HomePage = () => {
   const [filters, setFilters] = useState({
@@ -12,40 +14,32 @@ const HomePage = () => {
     search: '',
   });
 
-  const handleFilters = (filters) => {
+  const handleFilters = useCallback((filters) => {
     setFilters(filters);
-  };
+  }, []);
 
-  const { data: listings, error, isLoading } = useData(filters);
+  // const { data: listings, error, isLoading } = useData(filters);
+  const { listings, error, status } = useSelector((state) => state.listings);
+  const dispatch = useDispatch();
 
-  const renderListingList = () => {
-    if (isLoading) {
-      return (
-        <div className='flex justify-center'>
-          <Spinner size='sm' />
-        </div>
-      );
-    }
-
-    if (error) {
-      return <div className='text-center text-red-500'>{error}</div>;
-    }
-
-    return <ListingList listings={listings} />;
-  };
+  useEffect(() => {
+    dispatch(getListings(filters));
+  }, [dispatch, filters]);
 
   return (
     <div className='container py-4'>
-      <h1>{error}</h1>
-      <button onClick={() => console.log(listings)}>zxc</button>
+      <button onClick={() => dispatch(getListings())}>xD</button>
+
       <div className='mb-4'>
-        <ListingFilters onChange={handleFilters} isLoading={isLoading} />
+        <ListingFilters
+          onChange={handleFilters}
+          isLoading={status === 'loading'}
+        />
         <Separator className='my-4' />
-        <h2 onClick={() => console.log(isLoading)}>
-          isLoading: {isLoading.toString()}
-        </h2>
+        <DataRenderer error={error} isLoading={status === 'loading'}>
+          <ListingList listings={listings} />;
+        </DataRenderer>
       </div>
-      {renderListingList()}
     </div>
   );
 };

@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import useData from '@/hooks/useData';
 
 import ListingDetailsCard from '@/components/ListingDetailsCard';
+import DataRenderer from '@/components/DataRendered';
 
 const ListingDetailsPage = () => {
   const params = useParams();
@@ -28,14 +29,11 @@ const ListingDetailsPage = () => {
 
   return (
     <div className='container py-4'>
-      <h1 onClick={() => console.log(listingId)}>{listingId}</h1>
-      <h1>{error}</h1>
-      <button onClick={() => console.log(listing)}>zxc</button>
       <div className='mb-4'>
-        <ListingDetailsCard listing={listing} />
-        <button onClick={() => console.log('listing', listing)}>zxcxxxx</button>
+        <DataRenderer error={error} isLoading={isLoading}>
+          <ListingDetailsCard listing={listing} />
+        </DataRenderer>
       </div>
-      {renderListing()}
     </div>
   );
 };

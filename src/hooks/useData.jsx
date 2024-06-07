@@ -7,7 +7,7 @@ const useData = (filters) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const getData = async () => {
       setError(null);
       setIsLoading(true);
 
@@ -23,7 +23,7 @@ const useData = (filters) => {
       }
     };
 
-    fetchData();
+    getData();
   }, [filters]);
 
   return { data, error, isLoading };
