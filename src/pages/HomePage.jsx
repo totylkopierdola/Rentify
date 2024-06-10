@@ -20,6 +20,7 @@ const HomePage = () => {
 
   // const { data: listings, error, isLoading } = useData(filters);
   const { listings, error, status } = useSelector((state) => state.listings);
+  console.log(listings);
   const dispatch = useDispatch();
 
   useEffect(() => {
