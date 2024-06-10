@@ -4,12 +4,22 @@ import HomePage from './pages/HomePage';
 import ListingDetailsPage from './pages/ListingDetailsPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ListingFavoritesPage from './pages/ListingFavoritesPage';
+import SignInPage from './pages/SignInPage';
+import SignUpPage from './pages/SignUpPage';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
     children: [
+      {
+        path: '/signup',
+        element: <SignUpPage />,
+      },
+      {
+        path: '/signin',
+        element: <SignInPage />,
+      },
       {
         path: '/',
         element: <HomePage />,

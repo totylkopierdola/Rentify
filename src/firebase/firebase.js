@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 import { get } from 'react-hook-form';
 // TODO: Add SDKs for Firebase products that you want to use
@@ -18,7 +19,12 @@ export const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+console.log('auth', auth);
+console.log('apiKey', auth.config.apiKey);
 
 const db = getFirestore(app);
+
+export { app, auth };
 
 export default db;

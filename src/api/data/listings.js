@@ -1,5 +1,4 @@
 import { addDays, startOfDay } from 'date-fns';
-import { initializeApp } from 'firebase/app';
 import {
   getFirestore,
   collection,
@@ -12,16 +11,14 @@ import {
   where,
 } from 'firebase/firestore';
 
-import { firebaseConfig } from '../../firebase';
-import '../../firebase';
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-// Initialize Firestore
-const firestore = getFirestore(app);
+// firebase
+import db from '../../firebase/firebase';
+import '../../firebase/firebase';
+const firestore = db;
 
 const startOfToday = startOfDay(new Date());
+
+// Initialize Firebase
 
 const createListing = (listing) => {
   const {

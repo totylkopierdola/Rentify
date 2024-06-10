@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 
 import { Separator } from '@/components/ui';
+import { useContext } from 'react';
+import { useAuth } from './AuthProvider';
 
 const Navbar = () => {
   return (
