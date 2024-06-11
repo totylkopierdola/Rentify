@@ -15,6 +15,7 @@ import {
 import { useAuth } from './AuthProvider';
 import { doSignInWithEmailAndPassword, doSignOut } from '../firebase/auth';
 import { set } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
 const signInFormSchema = z.object({
   email: z.string().email(),
@@ -22,6 +23,8 @@ const signInFormSchema = z.object({
 });
 
 const SignInForm = () => {
+  const navigate = useNavigate();
+
   const {
     formState: { errors, isSubmitting },
     handleSubmit,
@@ -43,6 +46,8 @@ const SignInForm = () => {
 
       alert('success');
       // setUserLoggedIn(true);
+      // redirect to homepage
+      navigate('/');
     } catch (error) {
       // Handle errors appropriately
       setError('root', {
