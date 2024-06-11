@@ -7,6 +7,7 @@ import ListingFavoritesPage from './pages/ListingFavoritesPage';
 import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
 import Route from './components/Route';
+import CreateRentalPage from './pages/CreateRentalPage';
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,14 @@ const router = createBrowserRouter([
         element: (
           <Route isProtected>
             <ListingFavoritesPage />
+          </Route>
+        ),
+      },
+      {
+        path: '/create-rental',
+        element: (
+          <Route isProtected>
+            <CreateRentalPage />
           </Route>
         ),
       },
