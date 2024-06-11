@@ -17,6 +17,9 @@ const ListingCardImages = ({ listing }) => {
       className='w-full'
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
+      opts={{
+        loop: true,
+      }}
     >
       <CarouselContent className='ml-0'>
         {listing.images.map((image, index) => (

@@ -14,11 +14,7 @@ const Route = ({ children, isProtected }) => {
   }, [isProtected, userLoggedIn, navigate]);
 
   if (isProtected && userLoggedIn === null) {
-    return (
-      <div className='flex justify-center'>
-        <Spinner size='sm' />
-      </div>
-    );
+    return <div className='flex justify-center'>XDDDDDDDD</div>;
   }
 
   return children;

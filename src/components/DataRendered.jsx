@@ -4,7 +4,7 @@ const DataRenderer = ({ children, error, isLoading }) => {
   if (isLoading) {
     return (
       <div className='flex justify-center '>
-        <Spinner size='sm' />
+        <Spinner size='lg' />
       </div>
     );
   }
