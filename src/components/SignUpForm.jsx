@@ -39,7 +39,7 @@ const SignUpForm = () => {
     const { email, password } = data;
     try {
       await doCreateUserWithEmailAndPassword(email, password);
-      // Handle successful sign-up here (e.g., redirect to login page or show success message)
+      navigate('/', { replace: true });
     } catch (error) {
       setSignUpError(error.message);
       // Optionally set specific errors for fields

@@ -1,9 +1,6 @@
-import Devbar from '@/components/Devbar/Devbar';
-import HomePage from '@/pages/HomePage';
 import { Outlet } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import { useAuth } from './components/AuthProvider';
-import MobileNavbar from './components/MobileNavbar/MobileNavbar';
 
 const App = () => {
   const { userLoggedIn } = useAuth();

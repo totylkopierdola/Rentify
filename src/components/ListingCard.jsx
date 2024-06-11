@@ -28,7 +28,7 @@ const ListingCard = ({ listing }) => {
           </div>
           <div className='flex items-center gap-2'>
             <Pin className='h-4 w-4 text-primary' />
-            <span className='text-muted-foreground'>{listing.locationId}</span>
+            <span className='text-muted-foreground'>{listing.location}</span>
           </div>
           <div className='flex items-center gap-2'>
             <Users className='h-4 w-4 text-primary' />

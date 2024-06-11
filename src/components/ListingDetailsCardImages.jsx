@@ -20,7 +20,7 @@ const ListingDetailsCardImages = ({ listing }) => {
     <>
       <img
         className='mb-4 h-[500px] w-full rounded-md object-cover'
-        src={getImageUrl(listing.images[currentImageIndex])}
+        src={listing.images[currentImageIndex]}
         alt={listing.name}
       />
       <Carousel className='mx-auto mb-4 w-[90%]'>
@@ -34,7 +34,7 @@ const ListingDetailsCardImages = ({ listing }) => {
             >
               <img
                 className='h-52 w-full object-cover shadow-sm'
-                src={getImageUrl(image)}
+                src={image}
                 alt={listing.name}
               />
             </CarouselItem>

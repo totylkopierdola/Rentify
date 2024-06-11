@@ -26,7 +26,8 @@ const ListingCardImages = ({ listing }) => {
           <CarouselItem key={image} className='pl-0'>
             <img
               className='h-[200px] w-full rounded-md object-cover'
-              src={getImageUrl(image)}
+              // src={getImageUrl(image)}
+              src={image}
               alt={`${listing.name} Image ${index + 1}`}
             />
           </CarouselItem>
