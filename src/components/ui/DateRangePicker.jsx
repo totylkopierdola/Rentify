@@ -25,7 +25,7 @@ export const DateRangePicker = ({
   };
 
   return (
-    <div className={cn('grid gap-2', className)}>
+    <div className={cn('grid w-full gap-2', className)}>
       <Popover>
         <PopoverTrigger asChild>
           <Button
@@ -33,7 +33,7 @@ export const DateRangePicker = ({
             variant='outline'
             disabled={disabled}
             className={cn(
-              'w-[250px] justify-start text-left font-normal',
+              'justify-start text-left font-normal',
               !value && 'text-muted-foreground',
             )}
           >

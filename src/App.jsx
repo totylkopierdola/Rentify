@@ -8,16 +8,8 @@ const App = () => {
   const { userLoggedIn } = useAuth();
   return (
     <>
-      <div className='fixed bottom-0 left-0 top-0'>
-        <Devbar />
-      </div>
-      <div className='ml-[700px]'>
-        <h2 onClick={() => console.log('userLoggedIn', userLoggedIn)}>
-          logged?
-        </h2>
-        {userLoggedIn && <Navbar />}
-        <Outlet />
-      </div>
+      {userLoggedIn && <Navbar />}
+      <Outlet />
     </>
   );
 };

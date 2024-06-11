@@ -12,9 +12,9 @@ const ListingFilters = ({ onChange, isLoading }) => {
   };
 
   return (
-    <div className='flex flex-row items-center justify-center gap-2'>
+    <div className='flex flex-row flex-wrap gap-2 xl:flex-nowrap xl:justify-between'>
       <Input
-        className='w-[400px]'
+        className=''
         placeholder='Search destinations'
         value={search}
         onChange={(e) => setSearch(e.target.value)}
@@ -25,6 +25,7 @@ const ListingFilters = ({ onChange, isLoading }) => {
       />
 
       <DateRangePicker
+        className=''
         mode='single'
         value={dates}
         onChange={setDates}
@@ -32,15 +33,23 @@ const ListingFilters = ({ onChange, isLoading }) => {
         placeholder='Add dates'
         disabled={isLoading}
       />
-      <Stepper
-        label='guest'
-        value={guests}
-        onChange={setGuests}
-        disabled={isLoading}
-      />
-      <Button disabled={isLoading} onClick={handleSubmit}>
-        <Search className='h-4 w-4' />
-      </Button>
+
+      <div className='flex w-full justify-between gap-4 xl:w-[300px] xl:justify-center xl:gap-2'>
+        <Stepper
+          label='guest'
+          value={guests}
+          onChange={setGuests}
+          disabled={isLoading}
+        />
+        <Button
+          className='w-full xl:w-[200px]'
+          disabled={isLoading}
+          onClick={handleSubmit}
+        >
+          Search
+          <Search className='0 ml-2 h-4 w-4' />
+        </Button>
+      </div>
     </div>
   );
 };
