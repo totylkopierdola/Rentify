@@ -11,6 +11,7 @@ import {
   Input,
   Separator,
 } from '@/components/ui';
+import { Link } from 'react-router-dom';
 
 const signUpFormSchema = z
   .object({
@@ -63,7 +64,7 @@ const SignUpForm = () => {
       <CardContent>
         <form className='flex flex-col gap-4' onSubmit={handleSubmit(onSubmit)}>
           <div>
-            <Input {...register('email')} placeholder='name@example.com' />
+            <Input {...register('email')} placeholder='Email' />
             {errors['email'] && (
               <div className='mt-2 text-sm text-red-500'>
                 {errors['email'].message}
@@ -100,6 +101,16 @@ const SignUpForm = () => {
           <Button disabled={isSubmitting} type='submit'>
             {isSubmitting ? 'Loading...' : 'Sign Up'}
           </Button>
+
+          <p className='flex justify-center '>
+            Already have an account?
+            <Link
+              to='/signin'
+              className='cursor-pointer px-2 font-medium text-primary underline'
+            >
+              Sign in
+            </Link>
+          </p>
 
           {signUpError && (
             <div className='text-center text-sm text-red-500'>

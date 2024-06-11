@@ -29,8 +29,6 @@ const HomePage = () => {
 
   return (
     <div className='container py-4'>
-      <button onClick={() => dispatch(getListings())}>xD</button>
-
       <div className='mb-4'>
         <ListingFilters
           onChange={handleFilters}
@@ -38,7 +36,7 @@ const HomePage = () => {
         />
         <Separator className='my-4' />
         <DataRenderer error={error} isLoading={status === 'loading'}>
-          <ListingList listings={listings} />;
+          <ListingList listings={listings} />
         </DataRenderer>
       </div>
     </div>

@@ -6,6 +6,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import ListingFavoritesPage from './pages/ListingFavoritesPage';
 import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
+import Route from './components/Route';
 
 const router = createBrowserRouter([
   {
@@ -22,16 +23,28 @@ const router = createBrowserRouter([
       },
       {
         path: '/',
-        element: <HomePage />,
+        element: (
+          <Route isProtected>
+            <HomePage />
+          </Route>
+        ),
       },
 
       {
         path: '/listings/:listingId',
-        element: <ListingDetailsPage />,
+        element: (
+          <Route isProtected>
+            <ListingDetailsPage />
+          </Route>
+        ),
       },
       {
         path: '/favorites',
-        element: <ListingFavoritesPage />,
+        element: (
+          <Route isProtected>
+            <ListingFavoritesPage />
+          </Route>
+        ),
       },
       {
         path: '*',
