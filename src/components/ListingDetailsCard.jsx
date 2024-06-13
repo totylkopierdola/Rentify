@@ -1,5 +1,4 @@
 import { DollarSign, Pin, Users } from 'lucide-react';
-
 import { Card, Separator } from '@/components/ui';
 import ListingDetailsCardImages from './ListingDetailsCardImages';
 import ListingFavoriteButton from './ListingFavoriteButton';

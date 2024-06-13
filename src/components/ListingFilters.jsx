@@ -12,7 +12,7 @@ const ListingFilters = ({ onChange, isLoading }) => {
   };
 
   return (
-    <div className='flex flex-row flex-wrap gap-2 xl:flex-nowrap xl:justify-between'>
+    <div className='flex flex-row flex-wrap gap-2 lg:flex-nowrap lg:justify-between'>
       <Input
         className=''
         placeholder='Search destinations'
@@ -34,7 +34,7 @@ const ListingFilters = ({ onChange, isLoading }) => {
         disabled={isLoading}
       />
 
-      <div className='flex w-full justify-between gap-4 xl:w-[300px] xl:justify-center xl:gap-2'>
+      <div className='flex w-full justify-between gap-4 lg:w-[300px] lg:justify-center lg:gap-2'>
         <Stepper
           label='guest'
           value={guests}
@@ -42,7 +42,7 @@ const ListingFilters = ({ onChange, isLoading }) => {
           disabled={isLoading}
         />
         <Button
-          className='w-full xl:w-[200px]'
+          className='w-full lg:w-[200px]'
           disabled={isLoading}
           onClick={handleSubmit}
         >
