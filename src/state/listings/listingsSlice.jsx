@@ -35,7 +35,6 @@ const listingsSlice = createSlice({
       })
       .addCase(getListings.rejected, (state, action) => {
         state.status = 'failed';
-        // state.error = action.error.message;
         state.error = action.payload.message;
       });
   },

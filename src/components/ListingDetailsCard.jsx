@@ -7,6 +7,7 @@ import ListingFavoriteButton from './ListingFavoriteButton';
 const ListingDetailsCard = ({ listing }) => {
   return (
     <Card className='mx-auto p-4'>
+      <h3 onClick={() => console.log('listing', listing)}>log listing</h3>
       <ListingDetailsCardImages listing={listing} />
       <Separator className='my-4' />
       <div className='flex flex-col gap-2'>

@@ -29,6 +29,7 @@ const HomePage = () => {
 
   return (
     <div className='container py-4'>
+      <h2 onClick={() => console.log(listings)}>Log listings json</h2>
       <div className='mb-4'>
         <ListingFilters
           onChange={handleFilters}

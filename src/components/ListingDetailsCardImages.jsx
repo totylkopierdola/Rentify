@@ -8,12 +8,32 @@ import {
   CarouselPrevious,
 } from '@/components/ui';
 import { getImageUrl } from '@/lib/utils/images';
+import { addListingToFirestore } from '../api/data/listings';
+import { listingObject } from '@/api/data/listings';
 
 const ListingDetailsCardImages = ({ listing }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   if (!listing.images || listing.images.length === 0) {
-    return <p>No images available</p>;
+    return (
+      <>
+        <h1
+          onClick={() => {
+            addListingToFirestore(listingObject);
+          }}
+        >
+          addListing
+        </h1>
+        <h1
+          onClick={() => {
+            console.log('listing', listing);
+          }}
+        >
+          log listing/s
+        </h1>
+        <p>No images available</p>;
+      </>
+    );
   }
 
   return (
@@ -23,6 +43,8 @@ const ListingDetailsCardImages = ({ listing }) => {
         src={listing.images[currentImageIndex]}
         alt={listing.name}
       />
+
+      <h1 onClick={() => console.log(listing.images[currentImageIndex])}>xd</h1>
       <Carousel className='mx-auto mb-4 w-[90%]'>
         <CarouselContent>
           {listing.images.map((image, index) => (
