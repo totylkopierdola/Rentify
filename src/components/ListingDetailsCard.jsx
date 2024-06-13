@@ -14,7 +14,7 @@ const ListingDetailsCard = ({ listing }) => {
           <h1 className='mb-2 text-2xl font-bold'>{listing.name}</h1>
           <ListingFavoriteButton
             listing={listing}
-            className='z-10 ml-2 h-9 w-9 rounded-full border-none bg-secondary bg-opacity-50 p-2 hover:bg-red-500  hover:bg-opacity-10 '
+            className='z-10 ml-2 h-9 w-9 rounded-full border-none bg-secondary bg-opacity-50 p-2 hover:bg-destructive  hover:bg-opacity-10 '
           />
         </div>
         <div className='flex items-center gap-2'>

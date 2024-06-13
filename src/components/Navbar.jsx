@@ -121,27 +121,36 @@ const Navbar = () => {
                 </div>
               </div>
             </div>
-
-            <DisclosurePanel className='sm:hidden'>
-              <div className='space-y-1 px-2 pb-3 pt-2'>
-                {navigation.map((item) => (
-                  <DisclosureButton
-                    key={item.name}
-                    as={Link}
-                    to={item.to}
-                    className={cn(
-                      item.current
-                        ? 'bg-gray-900 text-white'
-                        : ' hover:bg-gray-700 hover:text-white',
-                      'block rounded-md px-3 py-2 text-base font-medium',
-                    )}
-                    aria-current={item.current ? 'page' : undefined}
-                  >
-                    {item.name}
-                  </DisclosureButton>
-                ))}
-              </div>
-            </DisclosurePanel>
+            <Transition
+              enter='duration-200 ease-out'
+              enterFrom='opacity-0 -translate-y-6'
+              enterTo='opacity-100 translate-y-0'
+              leave='duration-300 ease-out'
+              leaveFrom='opacity-100 translate-y-0'
+              leaveTo='opacity-0 -translate-y-6'
+              className='absolute z-10 w-full bg-[#1A1A1A]'
+            >
+              <DisclosurePanel className='border-t sm:hidden'>
+                <div className='space-y-1 px-2 pb-3 pt-2'>
+                  {navigation.map((item) => (
+                    <DisclosureButton
+                      key={item.name}
+                      as={Link}
+                      to={item.to}
+                      className={cn(
+                        item.current
+                          ? 'bg-gray-900 text-white'
+                          : ' hover:bg-card hover:text-white',
+                        'block rounded-md px-3 py-2 text-base font-medium',
+                      )}
+                      aria-current={item.current ? 'page' : undefined}
+                    >
+                      {item.name}
+                    </DisclosureButton>
+                  ))}
+                </div>
+              </DisclosurePanel>
+            </Transition>
           </>
         )}
       </Disclosure>
