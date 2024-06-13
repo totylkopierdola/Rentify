@@ -23,7 +23,8 @@ const ListingCardImages = ({ listing }) => {
     >
       <CarouselContent className='ml-0'>
         {listing.images.map((image, index) => (
-          <CarouselItem key={image} className='pl-0'>
+          // <CarouselItem key={image} className='pl-0'>
+          <CarouselItem key={`${image}-${index}`} className='pl-0'>
             <img
               className='h-[200px] w-full rounded-md object-cover'
               // src={getImageUrl(image)}

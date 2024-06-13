@@ -1,4 +1,3 @@
-import { Fragment } from 'react';
 import {
   Disclosure,
   DisclosureButton,
@@ -14,6 +13,7 @@ import { cn } from '@/lib/utils/cn';
 import { doSignOut } from '@/firebase/auth';
 import { Link } from 'react-router-dom';
 import { Separator } from '@/components/ui';
+import logo from '../assets/bookApp.png';
 
 const navigation = [
   { name: 'Home', to: '/', current: false },
@@ -37,11 +37,17 @@ const Navbar = () => {
                   </DisclosureButton>
                 </div>
                 <Link to='/'>
-                  <h2 className='hidden xl:block'>bookApp</h2>
+                  <div className=' hidden  justify-center gap-2 xl:flex'>
+                    <img src={logo} alt='bookApp' className='h-8' />
+                    <h3>BookApp</h3>
+                  </div>
                 </Link>
                 <div className='flex flex-1 items-center justify-center sm:items-stretch sm:justify-end'>
                   <Link to='/'>
-                    <h2 className='xl:hidden'>bookApp</h2>
+                    <div className=' flex  justify-center gap-2 xl:hidden'>
+                      <img src={logo} alt='bookApp' className='h-8' />
+                      <h3>BookApp</h3>
+                    </div>
                   </Link>
                   <div className='hidden sm:ml-6 sm:block'>
                     <div className='flex space-x-4'>
@@ -82,6 +88,19 @@ const Navbar = () => {
                       leaveTo='transform opacity-0 scale-95'
                     >
                       <MenuItems className='absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
+                        <MenuItem>
+                          {({ focus }) => (
+                            <Link
+                              to='/create-rental'
+                              className={cn(
+                                focus ? 'bg-gray-100' : '',
+                                'block px-4 py-2 text-sm text-gray-700',
+                              )}
+                            >
+                              Create offer
+                            </Link>
+                          )}
+                        </MenuItem>
                         <MenuItem>
                           {({ focus }) => (
                             <Link

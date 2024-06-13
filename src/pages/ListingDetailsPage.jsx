@@ -13,20 +13,6 @@ const ListingDetailsPage = () => {
 
   const { data: listing, error, isLoading } = useData(listingId);
 
-  const renderListing = () => {
-    if (isLoading) {
-      return (
-        <div className='flex justify-center'>
-          <Spinner size='sm' />
-        </div>
-      );
-    }
-
-    if (error) {
-      return <div className='text-center text-red-500'>{error}</div>;
-    }
-  };
-
   return (
     <div className='container py-4'>
       <div className='mb-4'>

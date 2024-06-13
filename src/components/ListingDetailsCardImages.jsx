@@ -27,7 +27,7 @@ const ListingDetailsCardImages = ({ listing }) => {
         <CarouselContent>
           {listing.images.map((image, index) => (
             <CarouselItem
-              key={image}
+              key={`${image}-${index}`}
               className='basis-1/3 cursor-pointer'
               onClick={() => setCurrentImageIndex(index)}
               isSelected={index === currentImageIndex}
