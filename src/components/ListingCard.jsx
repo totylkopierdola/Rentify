@@ -8,7 +8,7 @@ import ListingFavoriteButton from './ListingFavoriteButton';
 import { useAuth } from './AuthProvider';
 
 const ListingCard = ({ listing }) => {
-  const userId = useAuth().userLoggedIn.uid;
+  const userId = useAuth()?.userLoggedIn?.uid;
   const isCreatedByCurrentUser = listing.createdBy === userId;
 
   return (

@@ -105,7 +105,7 @@ const SignUpForm = () => {
           <p className='flex justify-center '>
             Already have an account?
             <Link
-              to='/signin'
+              to='/sign-in'
               className='cursor-pointer px-2 font-medium text-primary underline'
             >
               Sign in

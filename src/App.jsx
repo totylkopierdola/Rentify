@@ -6,7 +6,7 @@ const App = () => {
   const { userLoggedIn } = useAuth();
   return (
     <>
-      {userLoggedIn && <Navbar />}
+      <Navbar userLoggedIn={userLoggedIn} />
       <Outlet />
     </>
   );
