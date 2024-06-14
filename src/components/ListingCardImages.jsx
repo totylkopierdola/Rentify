@@ -7,7 +7,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui';
-import { getImageUrl } from '@/lib/utils/images';
 
 const ListingCardImages = ({ listing }) => {
   const [isHovering, setIsHovering] = useState(false);
@@ -27,7 +26,6 @@ const ListingCardImages = ({ listing }) => {
           <CarouselItem key={`${image}-${index}`} className='pl-0'>
             <img
               className='h-[200px] w-full rounded-md object-cover'
-              // src={getImageUrl(image)}
               src={image}
               alt={`${listing.name} Image ${index + 1}`}
             />

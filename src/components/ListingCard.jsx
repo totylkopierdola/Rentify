@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui';
 import { DollarSign, Pencil, Pin, Users } from 'lucide-react';
-import { getImageUrl } from '@/lib/utils/images';
 import ListingCardImages from '@/components/ListingCardImages';
 import { Link } from 'react-router-dom';
 import ListingFavoriteButton from './ListingFavoriteButton';
