@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -7,6 +7,7 @@ import {
   Card,
   CardContent,
   CardHeader,
+  DateRangePicker,
   Input,
   Separator,
 } from '@/components/ui'; // Assuming you have UI components for input fields, buttons, etc.
@@ -22,17 +23,24 @@ const rentalListingSchema = z.object({
   description: z
     .string()
     .min(10, 'Description must be at least 10 characters long'),
-  // images: z.array(z.string()).nonempty('At least one image is required'),
+  images: z.array(z.string()).nonempty('At least one image is required'),
   location: z.string().nonempty('Location is required'),
   maxGuests: z.number().positive('Max guests must be a positive number'),
   name: z.string().min(5, 'Title must be at least 5 characters long'),
   price: z.number().positive('Price must be a positive number'),
+  dates: z
+    .object({
+      from: z.date(),
+      to: z.date(),
+    })
+    .optional(),
 });
 
 const CreateRentalForm = () => {
   const [createListingError, setCreateListingError] = useState(null);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [files, setFiles] = useState([]);
+  const [dates, setDates] = useState();
   const {
     formState: { errors, isSubmitting },
     handleSubmit,
@@ -64,8 +72,13 @@ const CreateRentalForm = () => {
     });
   };
 
+  // useEffect(() => {
+  //   console.log('Form data:', getValues());
+  // }, [availability]);
+
   const onSubmit = async (data) => {
     try {
+      console.log('data', data);
       // Handle submission of rental listing data
       const userId = userLoggedIn.uid;
 
@@ -202,6 +215,21 @@ const CreateRentalForm = () => {
             ))}
           </div>
 
+          <DateRangePicker
+            className=''
+            mode='single'
+            value={dates}
+            onChange={(newDates) => {
+              setDates(newDates);
+              setValue('dates', newDates);
+            }}
+            minDate={new Date()}
+            placeholder='Add dates'
+            // disabled={isLoading}
+          />
+
+          <p onClick={() => console.log('data', getValues())}>xd</p>
+          <h2 onClick={() => getValues()}>getValues()</h2>
           <Button disabled={isSubmitting} type='submit'>
             {isSubmitting ? 'Creating...' : 'Create Offer'}
           </Button>

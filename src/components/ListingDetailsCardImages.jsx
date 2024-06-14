@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import {
   Carousel,
   CarouselContent,
@@ -7,9 +6,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui';
-import { getImageUrl } from '@/lib/utils/images';
-import { addListingToFirestore } from '../api/data/listings';
-import { listingObject } from '@/api/data/listings';
 
 const ListingDetailsCardImages = ({ listing }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -17,13 +13,6 @@ const ListingDetailsCardImages = ({ listing }) => {
   if (!listing.images || listing.images.length === 0) {
     return (
       <>
-        <h1
-          onClick={() => {
-            addListingToFirestore(listingObject);
-          }}
-        >
-          addListing
-        </h1>
         <h1
           onClick={() => {
             console.log('listing', listing);
