@@ -1,12 +1,16 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui';
-import { DollarSign, Pin, Users } from 'lucide-react';
+import { DollarSign, Pencil, Pin, Users } from 'lucide-react';
 import { getImageUrl } from '@/lib/utils/images';
 import ListingCardImages from '@/components/ListingCardImages';
 import { Link } from 'react-router-dom';
 import ListingFavoriteButton from './ListingFavoriteButton';
+import { useAuth } from './AuthProvider';
 
 const ListingCard = ({ listing }) => {
+  const userId = useAuth().userLoggedIn.uid;
+  const isCreatedByCurrentUser = listing.createdBy === userId;
+
   return (
     <Link to={`/listings/${listing.id}`}>
       <Card className='group w-[320px]'>
@@ -16,7 +20,19 @@ const ListingCard = ({ listing }) => {
             listing={listing}
           />
         </div>
-        <ListingCardImages listing={listing} />
+        <div className='relative h-[200px] w-full'>
+          {isCreatedByCurrentUser && (
+            <>
+              <div className='absolute left-2 top-2 z-10 rounded bg-primary px-2 py-1 text-secondary shadow-md'>
+                Your listing
+              </div>
+              <div className='absolute bottom-2 right-2 z-20 flex h-10 w-10 scale-[0.9] items-center justify-center rounded-md bg-secondary shadow-sm duration-500 hover:scale-100 hover:transition-all'>
+                <Pencil />
+              </div>
+            </>
+          )}
+          <ListingCardImages listing={listing} />
+        </div>
         <CardContent className='flex flex-col gap-2 p-4'>
           <h2 className='mb-2 text-xl font-semibold'>{listing.name}</h2>
           <div className='flex items-center gap-2'>
