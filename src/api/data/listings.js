@@ -54,6 +54,12 @@ export const getListingDataFromFirestore = async (filtersOrId) => {
         );
       }
 
+      if (filters.createdBy) {
+        console.log('filters.createdBy', filters.createdBy);
+
+        queryConstraints.push(where('createdBy', '==', filters.createdBy));
+      }
+
       return query(listingsCollection, ...queryConstraints);
     };
 

@@ -29,23 +29,6 @@ const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  // const initializeUser = async (user) => {
-  //   if (user) {
-  //     const token = await user.getIdToken();
-  //     console.log(token);
-  //     setToken(token);
-  //     setCurrentUser({ ...user });
-  //     setUserLoggedIn(true);
-  //     console.log('User token:', token); // Log the user token
-  //     // log current user details:
-  //     console.log('current user', user);
-  //   } else {
-  //     setCurrentUser(null);
-  //     setUserLoggedIn(false);
-  //   }
-  //   setLoading(false);
-  // };
-
   return (
     <AuthContext.Provider
       value={{ currentUser, userLoggedIn, loading, setUserLoggedIn }}

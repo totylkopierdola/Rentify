@@ -2,7 +2,6 @@ import ListingList from '@/components/ListingList';
 import { useCallback, useEffect, useState } from 'react';
 import ListingFilters from '@/components/ListingFilters';
 import { Separator } from '@/components/ui';
-// import useData from '@/hooks/useData';
 import DataRenderer from '@/components/DataRendered';
 import { useSelector, useDispatch } from 'react-redux';
 import { getListings } from '../state/listings/listingsSlice';
