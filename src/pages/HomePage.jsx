@@ -13,7 +13,7 @@ const HomePage = () => {
     search: '',
   });
 
-  const handleFilters = useCallback((filters) => {
+  const handleFilterChange = useCallback((filters) => {
     setFilters(filters);
   }, []);
 
@@ -30,7 +30,7 @@ const HomePage = () => {
     <div className='container py-4'>
       <div className='mb-4'>
         <ListingFilters
-          onChange={handleFilters}
+          onChange={handleFilterChange}
           isLoading={status === 'loading'}
         />
         <Separator className='my-4' />
