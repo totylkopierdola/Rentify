@@ -12,9 +12,9 @@ const ListingFilters = ({ onChange, isLoading }) => {
   };
 
   const handleClearFilters = () => {
-    setDates();
-    setGuests(0);
-    setSearch('');
+    dates !== undefined && setDates(undefined);
+    guests !== 0 && setGuests(0);
+    search !== '' && setSearch('');
     onChange({});
   };
 
