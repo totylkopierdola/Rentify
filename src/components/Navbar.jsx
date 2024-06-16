@@ -45,12 +45,12 @@ const Navbar = ({ userLoggedIn }) => {
                     {open ? <X /> : <MenuIcon />}
                   </DisclosureButton>
                 </div>
-                <Link to='/'>
+                <a href='/'>
                   <div className=' hidden  justify-center gap-2 xl:flex'>
                     <img src={logo} alt='bookApp' className='h-8' />
                     <h3>BookApp</h3>
                   </div>
-                </Link>
+                </a>
                 <div className='flex flex-1 items-center justify-center sm:items-stretch sm:justify-end'>
                   <Link to='/'>
                     <div className=' flex  justify-center gap-2 xl:hidden'>

@@ -1,4 +1,5 @@
 import { addDays, startOfDay } from 'date-fns';
+import Fuse from 'fuse.js';
 import {
   getFirestore,
   collection,
@@ -41,15 +42,21 @@ const buildQueryWithFilters = (listingsCollection, filters) => {
     queryConstraints.push(...filterByGuests(filters.guests));
   }
 
-  if (filters.search) {
-    queryConstraints.push(...filterBySearchTerm(filters.search));
-  }
-
   if (filters.createdBy) {
     queryConstraints.push(...filterByCreator(filters.createdBy));
   }
 
   return query(listingsCollection, ...queryConstraints);
+};
+
+// Apply fuzzy search
+const applyFuzzySearch = (listings, searchTerm) => {
+  const options = {
+    keys: ['name'],
+    threshold: 0.3, // Adjust the threshold for fuzzy matching
+  };
+  const fuse = new Fuse(listings, options);
+  return fuse.search(searchTerm).map((result) => result.item);
 };
 
 export const getListingDataFromFirestore = async (filtersOrId) => {
@@ -66,10 +73,17 @@ export const getListingDataFromFirestore = async (filtersOrId) => {
         filtersOrId,
       );
       const listingsSnapshot = await getDocs(listingsQuery);
-      return listingsSnapshot.docs.map((doc) => ({
+      let listings = listingsSnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
+
+      // Apply fuzzy search if search term is provided
+      if (filtersOrId.search) {
+        listings = applyFuzzySearch(listings, filtersOrId.search);
+      }
+
+      return listings;
     } else {
       throw new Error(
         'Invalid input: filtersOrId must be a string or an object',
