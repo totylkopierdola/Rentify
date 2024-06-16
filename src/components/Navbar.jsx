@@ -16,7 +16,6 @@ import {
   SquarePlus,
   X,
 } from 'lucide-react';
-// import { DiamondPlus } from 'lucide-react';
 
 import { cn } from '@/lib/utils/cn';
 import { doSignOut } from '@/firebase/auth';

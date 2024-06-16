@@ -1,6 +1,6 @@
-import { useState, useEffect, memo } from 'react';
+import { useState, memo } from 'react';
 import { Button, DateRangePicker, Input, Stepper } from '@/components/ui';
-import { Search } from 'lucide-react';
+import { Eraser, Search } from 'lucide-react';
 
 const ListingFilters = ({ onChange, isLoading }) => {
   const [dates, setDates] = useState();
@@ -9,6 +9,13 @@ const ListingFilters = ({ onChange, isLoading }) => {
 
   const handleSubmit = () => {
     onChange({ dates, guests, search });
+  };
+
+  const handleClearFilters = () => {
+    setDates();
+    setGuests(0);
+    setSearch('');
+    onChange({});
   };
 
   return (
@@ -48,6 +55,15 @@ const ListingFilters = ({ onChange, isLoading }) => {
         >
           Search
           <Search className='0 ml-2 h-4 w-4' />
+        </Button>
+
+        <Button
+          onClick={() => handleClearFilters()}
+          className='w-full lg:w-[200px]'
+          variant='secondary'
+        >
+          Clear
+          <Eraser className='0 ml-2 h-4 w-4' />
         </Button>
       </div>
     </div>

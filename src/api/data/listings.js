@@ -20,31 +20,15 @@ import {
 
 const firestore = db;
 
-// Fetch a single listing by ID
-const fetchListingById = async (listingsCollection, listingId) => {
-  const listingDocRef = doc(listingsCollection, listingId);
-  const listingSnapshot = await getDoc(listingDocRef);
-  if (!listingSnapshot.exists()) throw new Error('No such document!');
-  return { id: listingSnapshot.id, ...listingSnapshot.data() };
-};
-
 // Build query based on filters
 const buildQueryWithFilters = (listingsCollection, filters) => {
-  let queryConstraints = [];
-
-  if (filters.dates) {
-    queryConstraints.push(
-      ...filterByDateRange(filters.dates.from, filters.dates.to),
-    );
-  }
-
-  if (filters.guests !== undefined) {
-    queryConstraints.push(...filterByGuests(filters.guests));
-  }
-
-  if (filters.createdBy) {
-    queryConstraints.push(...filterByCreator(filters.createdBy));
-  }
+  const queryConstraints = [
+    ...(filters.dates
+      ? filterByDateRange(filters.dates.from, filters.dates.to)
+      : []),
+    ...(filters.guests !== undefined ? filterByGuests(filters.guests) : []),
+    ...(filters.createdBy ? filterByCreator(filters.createdBy) : []),
+  ];
 
   return query(listingsCollection, ...queryConstraints);
 };
