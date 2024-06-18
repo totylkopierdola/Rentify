@@ -11,6 +11,16 @@ import {
   Input,
   Separator,
 } from '@/components/ui'; // Assuming you have UI components for input fields, buttons, etc.
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/Dialog';
 import { Textarea } from '../components/ui/Textarea';
 import { Label } from '../components/ui/Label';
 import {
@@ -22,7 +32,6 @@ import { X } from 'lucide-react';
 import { uploadImage } from '../api/uploadImage';
 import { useParams } from 'react-router-dom';
 import useData from '@/hooks/useData';
-import { removeImage } from '@/api/removeImage';
 
 // Define the schema for the rental listing form data
 const rentalListingSchema = z.object({
@@ -283,12 +292,31 @@ const ListingForm = ({ formType }) => {
                   key={index}
                   src={preview}
                   alt={`Preview ${index}`}
-                  className=' h-32 w-32 rounded object-cover'
+                  className='h-16 w-16 rounded object-cover lg:h-32 lg:w-32'
                 />
-                <X
-                  className='absolute right-0 top-0 cursor-pointer shadow-2xl hover:scale-110 hover:text-red-500'
-                  onClick={() => removeImagePreview(index)}
-                />{' '}
+                <Dialog>
+                  <DialogTrigger>
+                    <X className='absolute right-0 top-0 cursor-pointer shadow-2xl hover:scale-110 hover:text-red-500' />{' '}
+                  </DialogTrigger>
+                  <DialogContent className='w-[90%] lg:w-auto'>
+                    <DialogHeader>
+                      <DialogTitle>Are you sure?</DialogTitle>
+                      <DialogDescription>
+                        Removing image cannot be undone. <br />
+                        This will permanently delete the image from database.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className='flex flex-row justify-center gap-1'>
+                      <Button
+                        variant='destructive'
+                        className='w-full lg:w-40'
+                        onClick={() => removeImagePreview(index)}
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
             ))}
           </div>
