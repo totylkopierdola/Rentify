@@ -32,7 +32,7 @@ const ListingCardImages = ({ listing }) => {
           </CarouselItem>
         ))}
       </CarouselContent>
-      {isHovering && (
+      {isHovering && listing.images.length > 1 && (
         <>
           <CarouselPrevious
             className={`absolute left-4 ${isHovering ? 'animate-fadeIn' : 'animate-fadeOut'}`}
