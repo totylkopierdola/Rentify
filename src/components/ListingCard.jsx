@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui';
 import { DollarSign, Pencil, Pin, Users } from 'lucide-react';
 import ListingCardImages from '@/components/ListingCardImages';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ListingFavoriteButton from './ListingFavoriteButton';
 import { useAuth } from './AuthProvider';
 
@@ -10,6 +10,8 @@ const ListingCard = ({ listing }) => {
   const userId = useAuth()?.userLoggedIn?.uid;
   const isCreatedByCurrentUser = listing.createdBy === userId;
   const navigate = useNavigate();
+  // get url using hook
+  const isMyListingsPage = useLocation().pathname.startsWith('/my-listings');
 
   const handlePencilClick = (e) => {
     e.stopPropagation();
@@ -29,15 +31,19 @@ const ListingCard = ({ listing }) => {
         <div className='relative h-[200px] w-full'>
           {isCreatedByCurrentUser && (
             <>
-              <div className='absolute left-2 top-2 z-10 rounded bg-primary px-2 py-1 text-secondary shadow-md'>
-                Your listing
-              </div>
-              <div
-                onClick={handlePencilClick}
-                className='absolute bottom-2 right-2 z-20 flex h-10 w-10 scale-[0.9] items-center justify-center rounded-md bg-secondary shadow-sm duration-500 hover:scale-100 hover:transition-all'
-              >
-                <Pencil />
-              </div>
+              {!isMyListingsPage && (
+                <div className='absolute left-2 top-2 z-10 rounded bg-primary px-2 py-1 text-secondary shadow-md'>
+                  Your listing
+                </div>
+              )}
+              {isMyListingsPage && (
+                <div
+                  onClick={handlePencilClick}
+                  className='absolute bottom-2 right-2 z-20 flex h-10 w-10 scale-[0.9] items-center justify-center rounded-md bg-secondary shadow-sm duration-500 hover:scale-100 hover:transition-all'
+                >
+                  <Pencil />
+                </div>
+              )}
             </>
           )}
           <ListingCardImages listing={listing} />
