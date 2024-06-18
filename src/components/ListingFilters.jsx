@@ -41,29 +41,25 @@ const ListingFilters = ({ onChange, isLoading }) => {
         disabled={isLoading}
       />
 
-      <div className='flex w-full justify-between gap-4 lg:w-[300px] lg:justify-center lg:gap-2'>
+      <div className='flex gap-2'>
         <Stepper
           label='guest'
           value={guests}
           onChange={setGuests}
           disabled={isLoading}
         />
-        <Button
-          className='w-full lg:w-[200px]'
-          disabled={isLoading}
-          onClick={handleSubmit}
-        >
+        <Button className='w-full ' disabled={isLoading} onClick={handleSubmit}>
           Search
           <Search className='0 ml-2 h-4 w-4' />
         </Button>
 
         <Button
           onClick={() => handleClearFilters()}
-          className='w-full lg:w-[200px]'
+          className='w-14 lg:w-full '
           variant='secondary'
         >
           Clear
-          <Eraser className='0 ml-2 h-4 w-4' />
+          <Eraser className='hidden  h-4 w-4 lg:ml-2 lg:flex' />
         </Button>
       </div>
     </div>
