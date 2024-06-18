@@ -10,6 +10,7 @@ import DataRenderer from '@/components/DataRendered';
 const ListingDetailsPage = () => {
   const params = useParams();
   const listingId = params.listingId;
+  console.log('params', params);
 
   const { data: listing, error, isLoading } = useData(listingId);
 
@@ -17,7 +18,10 @@ const ListingDetailsPage = () => {
     <div className='container py-4'>
       <div className='mb-4'>
         <DataRenderer error={error} isLoading={isLoading}>
-          <ListingDetailsCard listing={listing} />
+          <ListingDetailsCard
+            listing={listing}
+            isEditable={params === 'my-listings'}
+          />
         </DataRenderer>
       </div>
     </div>

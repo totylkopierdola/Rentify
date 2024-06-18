@@ -13,13 +13,6 @@ const ListingDetailsCardImages = ({ listing }) => {
   if (!listing.images || listing.images.length === 0) {
     return (
       <>
-        <h1
-          onClick={() => {
-            console.log('listing', listing);
-          }}
-        >
-          log listing/s
-        </h1>
         <p>No images available</p>;
       </>
     );
@@ -33,7 +26,6 @@ const ListingDetailsCardImages = ({ listing }) => {
         alt={listing.name}
       />
 
-      <h1 onClick={() => console.log(listing.images[currentImageIndex])}>xd</h1>
       <Carousel className='mx-auto mb-4 w-[90%]'>
         <CarouselContent>
           {listing.images.map((image, index) => (
