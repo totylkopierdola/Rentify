@@ -13,30 +13,36 @@ import {
 } from '@/components/ui'; // Assuming you have UI components for input fields, buttons, etc.
 import { Textarea } from '../components/ui/Textarea';
 import { Label } from '../components/ui/Label';
-import { createListingInFirestore } from '../api/data/listings'; // Import the function to create a listing in Firestore
+import {
+  createListingInFirestore,
+  updateListingInFirestore,
+} from '../api/data/listings';
 import { useAuth } from './AuthProvider';
 import { X } from 'lucide-react';
 import { uploadImage } from '../api/uploadImage';
+import { useParams } from 'react-router-dom';
+import useData from '@/hooks/useData';
 
 // Define the schema for the rental listing form data
 const rentalListingSchema = z.object({
   description: z
     .string()
     .min(10, 'Description must be at least 10 characters long'),
-  images: z.array(z.string()).nonempty('At least one image is required'),
-  location: z.string().nonempty('Location is required'),
+  // images: z.array(z.string()).nonempty('At least one image is required'),
+  // make images optional
+  images: z.array(z.string()).optional(),
+  location: z.string().min(1, 'Location is required'),
   maxGuests: z.number().positive('Max guests must be a positive number'),
   name: z.string().min(5, 'Title must be at least 5 characters long'),
   price: z.number().positive('Price must be a positive number'),
-  dates: z
-    .object({
-      from: z.date(),
-      to: z.date(),
-    })
-    .optional(),
+  // dates are optional
+  dates: z.object({
+    from: z.date().optional(),
+    to: z.date().optional(),
+  }),
 });
 
-const CreateRentalForm = () => {
+const ListingForm = ({ formType }) => {
   const [createListingError, setCreateListingError] = useState(null);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [files, setFiles] = useState([]);
@@ -51,8 +57,12 @@ const CreateRentalForm = () => {
   } = useForm({
     resolver: zodResolver(rentalListingSchema),
   });
+  const params = useParams();
+  const listingId = params.listingId;
 
   const { token, currentUser, userLoggedIn, loading } = useAuth();
+  const { data: listing, error, isLoading } = useData(listingId);
+  console.log('listing', listing);
 
   const handleImageChange = (e) => {
     const newFiles = Array.from(e.target.files);
@@ -64,35 +74,75 @@ const CreateRentalForm = () => {
       reader.onloadend = () => {
         newPreviews.push(reader.result);
         if (newPreviews.length === newFiles.length) {
-          setImagePreviews(newPreviews); // Update image previews state
-          setValue('images', newPreviews); // Update the form's images value
+          setImagePreviews([...imagePreviews, ...newPreviews]); // Update image previews state
+          setValue('images', [...imagePreviews, ...newPreviews]); // Update form value
         }
       };
       reader.readAsDataURL(file);
     });
   };
 
-  // useEffect(() => {
-  //   console.log('Form data:', getValues());
-  // }, [availability]);
+  const convertTimestampToDate = (timestamp) => {
+    if (!timestamp || typeof timestamp.seconds !== 'number') {
+      return new Date();
+    }
+    return new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
+  };
+
+  const fromDate = convertTimestampToDate(listing.dates?.from);
+  const toDate = convertTimestampToDate(listing.dates?.to);
+
+  useEffect(() => {
+    if (formType === 'edit' && listing) {
+      setValue('name', listing.name);
+      setValue('description', listing.description);
+      setValue('location', listing.location);
+      setValue('maxGuests', listing.maxGuests);
+      setValue('price', listing.price);
+
+      const fromDate = convertTimestampToDate(listing.dates?.from);
+      const toDate = convertTimestampToDate(listing.dates?.to);
+      const dates = { from: fromDate, to: toDate };
+
+      setValue('dates', dates);
+      setDates(dates);
+
+      // setDates(listing.dates);
+      if (listing.images) {
+        setImagePreviews(listing.images);
+        setValue('images', listing.images);
+      }
+    }
+  }, [listing, listing.images]);
 
   const onSubmit = async (data) => {
+    console.log('klik');
     try {
-      console.log('data', data);
-      // Handle submission of rental listing data
+      // console.log('data', data);
       const userId = userLoggedIn.uid;
 
-      const imageUrls = await Promise.all(
-        files.map((file) => uploadImage(file)),
-      );
-      data.images = imageUrls;
+      if (listing.images == []) {
+        console.log('jest puste images');
+        const imageUrls = await Promise.all(
+          files.map((file) => uploadImage(file)),
+        );
+        // data.images = imageUrls;
+        data.images = [...data.images, ...imageUrls];
+      }
 
-      console.log(imageUrls);
+      // console.log(imageUrls);
 
-      const listingId = await createListingInFirestore(data, userId);
-      console.log('Listing created with ID:', listingId);
+      // if its edit form, update listing
+      if (formType == 'edit') {
+        console.log('robie');
+        await updateListingInFirestore(listingId, data);
+        return;
+      }
 
-      console.log(data);
+      // if its create form, create listing
+      await createListingInFirestore(data, userId);
+
+      // console.log(data);
     } catch (error) {
       setCreateListingError(error.message);
     }
@@ -107,7 +157,8 @@ const CreateRentalForm = () => {
             console.log('userLoggedIn', userLoggedIn, 'uid', userLoggedIn.uid)
           }
         >
-          Create Rental Offer
+          {formType == 'edit' && 'Edit Rental Offer'}
+          {formType == 'create' && 'Create Rental Offer'}
         </h2>
         <Separator />
       </CardHeader>
@@ -187,6 +238,7 @@ const CreateRentalForm = () => {
 
           {/* FILE UPLOAD */}
           <div className=''>
+            <h4 onClick={() => console.log(getValues())}>images[ ]</h4>
             <Label htmlFor='pictures'>Pictures</Label>
             <Input
               id='pictures'
@@ -215,23 +267,44 @@ const CreateRentalForm = () => {
             ))}
           </div>
 
+          <h2
+            onClick={() => {
+              setValue('dates', listing.dates);
+              console.log(getValues('dates'));
+            }}
+          >
+            dates
+          </h2>
           <DateRangePicker
-            className=''
-            mode='single'
-            value={dates}
+            mode='range'
+            value={dates || { from: fromDate, to: toDate }}
             onChange={(newDates) => {
               setDates(newDates);
               setValue('dates', newDates);
             }}
             minDate={new Date()}
             placeholder='Add dates'
-            // disabled={isLoading}
+            disabled={isSubmitting}
           />
+          {errors['dates'] && (
+            <div className='mt-2 text-sm text-red-500'>
+              {errors['dates'].message && 'XDDd'}
+            </div>
+          )}
 
-          <p onClick={() => console.log('data', getValues())}>xd</p>
+          <p
+            onClick={() => {
+              console.log('data', getValues());
+              console.log('typeof dates:', typeof getValues().dates);
+              console.log('typeof dates.from:', typeof getValues().dates.from);
+            }}
+          >
+            xd
+          </p>
           <h2 onClick={() => getValues()}>getValues()</h2>
           <Button disabled={isSubmitting} type='submit'>
-            {isSubmitting ? 'Creating...' : 'Create Offer'}
+            {formType == 'edit' && 'Save Changes'}
+            {formType == 'create' && 'Create Listing'}
           </Button>
 
           {createListingError && (
@@ -245,4 +318,4 @@ const CreateRentalForm = () => {
   );
 };
 
-export default CreateRentalForm;
+export default ListingForm;

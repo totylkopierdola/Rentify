@@ -9,6 +9,7 @@ import SignUpPage from './pages/SignUpPage';
 import Route from './components/Route';
 import CreateRentalPage from './pages/CreateRentalPage';
 import MyListingsPage from './pages/MyListingsPage';
+import EditListingPage from './pages/EditListingPage';
 
 const router = createBrowserRouter([
   {
@@ -53,6 +54,14 @@ const router = createBrowserRouter([
         element: (
           <Route isProtected>
             <MyListingsPage />
+          </Route>
+        ),
+      },
+      {
+        path: '/listings/:listingId/edit',
+        element: (
+          <Route isProtected>
+            <EditListingPage />
           </Route>
         ),
       },

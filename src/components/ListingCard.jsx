@@ -32,14 +32,12 @@ const ListingCard = ({ listing }) => {
               <div className='absolute left-2 top-2 z-10 rounded bg-primary px-2 py-1 text-secondary shadow-md'>
                 Your listing
               </div>
-              {/* <Link to={`/listings/${listing.id}/edit`}> */}
               <div
                 onClick={handlePencilClick}
                 className='absolute bottom-2 right-2 z-20 flex h-10 w-10 scale-[0.9] items-center justify-center rounded-md bg-secondary shadow-sm duration-500 hover:scale-100 hover:transition-all'
               >
                 <Pencil />
               </div>
-              {/* </Link> */}
             </>
           )}
           <ListingCardImages listing={listing} />

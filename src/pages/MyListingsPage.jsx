@@ -1,6 +1,7 @@
 import { useAuth } from '@/components/AuthProvider';
 import DataRenderer from '@/components/DataRendered';
 import ListingList from '@/components/ListingList';
+import { Separator } from '@/components/ui';
 import { getListings } from '@/state/listings/listingsSlice';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,6 +27,8 @@ const MyListingsPage = () => {
 
   return (
     <div className='container py-4'>
+      <h1 className='text-center'>My Listings</h1>
+      <Separator className='my-4' />
       <DataRenderer error={error} isLoading={status === 'loading'}>
         <ListingList listings={myListings} />
       </DataRenderer>

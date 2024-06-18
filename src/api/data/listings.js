@@ -9,6 +9,7 @@ import {
   getDocs,
   serverTimestamp,
   query,
+  updateDoc,
 } from 'firebase/firestore';
 import db from '../../firebase/firebase';
 import {
@@ -19,6 +20,14 @@ import {
 } from './filterFunctions';
 
 const firestore = db;
+
+// Fetch a single listing by ID
+const fetchListingById = async (listingsCollection, listingId) => {
+  const listingDocRef = doc(listingsCollection, listingId);
+  const listingSnapshot = await getDoc(listingDocRef);
+  if (!listingSnapshot.exists()) throw new Error('No such document!');
+  return { id: listingSnapshot.id, ...listingSnapshot.data() };
+};
 
 // Build query based on filters
 const buildQueryWithFilters = (listingsCollection, filters) => {
@@ -92,5 +101,15 @@ export const createListingInFirestore = async (listing, userId) => {
   } catch (error) {
     console.error('Error adding document: ', error);
     throw error;
+  }
+};
+
+export const updateListingInFirestore = async (listingId, updatedData) => {
+  try {
+    const listingRef = doc(db, 'listings', listingId);
+    await updateDoc(listingRef, updatedData);
+    console.log('Listing updated successfully!');
+  } catch (error) {
+    console.error('Error updating listing: ', error);
   }
 };
