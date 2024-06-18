@@ -22,6 +22,7 @@ import { X } from 'lucide-react';
 import { uploadImage } from '../api/uploadImage';
 import { useParams } from 'react-router-dom';
 import useData from '@/hooks/useData';
+import { removeImage } from '@/api/removeImage';
 
 // Define the schema for the rental listing form data
 const rentalListingSchema = z.object({
@@ -89,6 +90,28 @@ const ListingForm = ({ formType }) => {
     return new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
   };
 
+  const removeImagePreview = async (index) => {
+    const updatedPreviews = [...imagePreviews];
+    const removedImage = updatedPreviews[index];
+    updatedPreviews.splice(index, 1);
+
+    try {
+      if (formType === 'edit') {
+        // Update Firestore document
+        const updatedImages = listing.images.filter(
+          (image) => image !== removedImage,
+        );
+        await updateListingInFirestore(listingId, { images: updatedImages });
+      }
+
+      setImagePreviews(updatedPreviews);
+      setValue('images', updatedPreviews);
+    } catch (error) {
+      console.error('Error removing image preview:', error);
+      setCreateListingError('Failed to remove image from server');
+    }
+  };
+
   const fromDate = convertTimestampToDate(listing.dates?.from);
   const toDate = convertTimestampToDate(listing.dates?.to);
 
@@ -100,8 +123,8 @@ const ListingForm = ({ formType }) => {
       setValue('maxGuests', listing.maxGuests);
       setValue('price', listing.price);
 
-      const fromDate = convertTimestampToDate(listing.dates?.from);
-      const toDate = convertTimestampToDate(listing.dates?.to);
+      // const fromDate = convertTimestampToDate(listing.dates?.from);
+      // const toDate = convertTimestampToDate(listing.dates?.to);
       const dates = { from: fromDate, to: toDate };
 
       setValue('dates', dates);
@@ -262,7 +285,10 @@ const ListingForm = ({ formType }) => {
                   alt={`Preview ${index}`}
                   className=' h-32 w-32 rounded object-cover'
                 />
-                <X className='absolute right-0 top-0 cursor-pointer shadow-2xl hover:scale-110 hover:text-red-500' />
+                <X
+                  className='absolute right-0 top-0 cursor-pointer shadow-2xl hover:scale-110 hover:text-red-500'
+                  onClick={() => removeImagePreview(index)}
+                />{' '}
               </div>
             ))}
           </div>

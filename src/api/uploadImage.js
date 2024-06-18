@@ -1,5 +1,4 @@
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-// import { storage } from '../firebase';
 import { storage } from '../firebase/firebase';
 
 // Function to generate a unique file name
