@@ -32,7 +32,7 @@ const ListingCard = ({ listing }) => {
           {isCreatedByCurrentUser && (
             <>
               {!isMyListingsPage && (
-                <div className='absolute left-2 top-2 z-10 rounded bg-primary px-2 py-1 text-secondary shadow-md'>
+                <div className='absolute left-2 top-2 z-10 rounded bg-primary px-2 py-1 text-secondary opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100'>
                   Your listing
                 </div>
               )}

@@ -29,7 +29,9 @@ const ListingDetailsCard = ({ listing, isEditable }) => {
   return (
     <Card className='mx-auto p-4'>
       <div className='relative flex flex-wrap items-center'>
-        <h1 className='mb-2 font-bold'>{listing.name}</h1>
+        <h1 className='mb-2 text-center font-bold lg:text-start'>
+          {listing.name}
+        </h1>
         {width >= 640 && (
           <div className='flex flex-row'>
             <ListingFavoriteButton

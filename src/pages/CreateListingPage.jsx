@@ -1,9 +1,9 @@
-import ListingForm from '@/components/ListingForm';
+import CreateListingForm from '@/components/CreateListingForm';
 
 const CreateRentalPage = () => {
   return (
     <div className='container flex  items-center py-4'>
-      <ListingForm formType='create' />
+      <CreateListingForm />
     </div>
   );
 };

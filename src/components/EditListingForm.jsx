@@ -10,7 +10,7 @@ import {
   DateRangePicker,
   Input,
   Separator,
-} from '@/components/ui'; // Assuming you have UI components for input fields, buttons, etc.
+} from '@/components/ui';
 import {
   Dialog,
   DialogClose,
@@ -23,10 +23,7 @@ import {
 } from '@/components/ui/Dialog';
 import { Textarea } from '../components/ui/Textarea';
 import { Label } from '../components/ui/Label';
-import {
-  createListingInFirestore,
-  updateListingInFirestore,
-} from '../api/data/listings';
+import { updateListingInFirestore } from '../api/data/listings';
 import { useAuth } from './AuthProvider';
 import { X } from 'lucide-react';
 import { uploadImage } from '../api/uploadImage';
@@ -38,8 +35,6 @@ const rentalListingSchema = z.object({
   description: z
     .string()
     .min(10, 'Description must be at least 10 characters long'),
-  // images: z.array(z.string()).nonempty('At least one image is required'),
-  // make images optional
   images: z.array(z.string()).optional(),
   location: z.string().min(1, 'Location is required'),
   maxGuests: z.number().positive('Max guests must be a positive number'),
@@ -52,7 +47,7 @@ const rentalListingSchema = z.object({
   }),
 });
 
-const ListingForm = ({ formType }) => {
+const EditListingForm = () => {
   const [createListingError, setCreateListingError] = useState(null);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [files, setFiles] = useState([]);
@@ -105,14 +100,10 @@ const ListingForm = ({ formType }) => {
     updatedPreviews.splice(index, 1);
 
     try {
-      if (formType === 'edit') {
-        // Update Firestore document
-        const updatedImages = listing.images.filter(
-          (image) => image !== removedImage,
-        );
-        await updateListingInFirestore(listingId, { images: updatedImages });
-      }
-
+      const updatedImages = listing.images.filter(
+        (image) => image !== removedImage,
+      );
+      await updateListingInFirestore(listingId, { images: updatedImages });
       setImagePreviews(updatedPreviews);
       setValue('images', updatedPreviews);
     } catch (error) {
@@ -125,21 +116,17 @@ const ListingForm = ({ formType }) => {
   const toDate = convertTimestampToDate(listing.dates?.to);
 
   useEffect(() => {
-    if (formType === 'edit' && listing) {
+    if (listing) {
       setValue('name', listing.name);
       setValue('description', listing.description);
       setValue('location', listing.location);
       setValue('maxGuests', listing.maxGuests);
       setValue('price', listing.price);
 
-      // const fromDate = convertTimestampToDate(listing.dates?.from);
-      // const toDate = convertTimestampToDate(listing.dates?.to);
       const dates = { from: fromDate, to: toDate };
-
       setValue('dates', dates);
       setDates(dates);
 
-      // setDates(listing.dates);
       if (listing.images) {
         setImagePreviews(listing.images);
         setValue('images', listing.images);
@@ -148,33 +135,17 @@ const ListingForm = ({ formType }) => {
   }, [listing, listing.images]);
 
   const onSubmit = async (data) => {
-    console.log('klik');
     try {
-      // console.log('data', data);
       const userId = userLoggedIn.uid;
 
-      if (listing.images == []) {
-        console.log('jest puste images');
+      if (!listing.images.length) {
         const imageUrls = await Promise.all(
           files.map((file) => uploadImage(file)),
         );
-        // data.images = imageUrls;
         data.images = [...data.images, ...imageUrls];
       }
 
-      // console.log(imageUrls);
-
-      // if its edit form, update listing
-      if (formType == 'edit') {
-        console.log('robie');
-        await updateListingInFirestore(listingId, data);
-        return;
-      }
-
-      // if its create form, create listing
-      await createListingInFirestore(data, userId);
-
-      // console.log(data);
+      await updateListingInFirestore(listingId, data);
     } catch (error) {
       setCreateListingError(error.message);
     }
@@ -183,15 +154,7 @@ const ListingForm = ({ formType }) => {
   return (
     <Card className='mx-auto w-full max-w-lg'>
       <CardHeader>
-        <h2
-          className='text-center text-2xl'
-          onClick={() =>
-            console.log('userLoggedIn', userLoggedIn, 'uid', userLoggedIn.uid)
-          }
-        >
-          {formType == 'edit' && 'Edit Rental Offer'}
-          {formType == 'create' && 'Create Rental Offer'}
-        </h2>
+        <h2 className='text-center text-2xl'>Edit Rental Offer</h2>
         <Separator />
       </CardHeader>
       <CardContent>
@@ -270,7 +233,6 @@ const ListingForm = ({ formType }) => {
 
           {/* FILE UPLOAD */}
           <div className=''>
-            <h4 onClick={() => console.log(getValues())}>images[ ]</h4>
             <Label htmlFor='pictures'>Pictures</Label>
             <Input
               id='pictures'
@@ -321,14 +283,6 @@ const ListingForm = ({ formType }) => {
             ))}
           </div>
 
-          <h2
-            onClick={() => {
-              setValue('dates', listing.dates);
-              console.log(getValues('dates'));
-            }}
-          >
-            dates
-          </h2>
           <DateRangePicker
             mode='range'
             value={dates || { from: fromDate, to: toDate }}
@@ -342,23 +296,12 @@ const ListingForm = ({ formType }) => {
           />
           {errors['dates'] && (
             <div className='mt-2 text-sm text-red-500'>
-              {errors['dates'].message && 'XDDd'}
+              {errors['dates'].message}
             </div>
           )}
 
-          <p
-            onClick={() => {
-              console.log('data', getValues());
-              console.log('typeof dates:', typeof getValues().dates);
-              console.log('typeof dates.from:', typeof getValues().dates.from);
-            }}
-          >
-            xd
-          </p>
-          <h2 onClick={() => getValues()}>getValues()</h2>
           <Button disabled={isSubmitting} type='submit'>
-            {formType == 'edit' && 'Save Changes'}
-            {formType == 'create' && 'Create Listing'}
+            Save Changes
           </Button>
 
           {createListingError && (
@@ -372,4 +315,4 @@ const ListingForm = ({ formType }) => {
   );
 };
 
-export default ListingForm;
+export default EditListingForm;

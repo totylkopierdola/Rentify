@@ -21,7 +21,7 @@ import { cn } from '@/lib/utils/cn';
 import { doSignOut } from '@/firebase/auth';
 import { Link } from 'react-router-dom';
 import { Button, Separator } from '@/components/ui';
-import logo from '../assets/bookApp.png';
+import logo from '../assets/Rentify.png';
 
 const navigation = [
   { name: 'Home', to: '/', current: false },
@@ -46,15 +46,15 @@ const Navbar = ({ userLoggedIn }) => {
                 </div>
                 <a href='/'>
                   <div className=' hidden  justify-center gap-2 xl:flex'>
-                    <img src={logo} alt='bookApp' className='h-8' />
-                    <h3>BookApp</h3>
+                    <img src={logo} alt='Rentify' className='h-8' />
+                    <h3>Rentify</h3>
                   </div>
                 </a>
                 <div className='flex flex-1 items-center justify-center sm:items-stretch sm:justify-end'>
                   <Link to='/'>
                     <div className=' flex  justify-center gap-2 xl:hidden'>
-                      <img src={logo} alt='bookApp' className='h-8' />
-                      <h3>BookApp</h3>
+                      <img src={logo} alt='Rentify' className='h-8' />
+                      <h3>Rentify</h3>
                     </div>
                   </Link>
                   <div className='hidden sm:ml-6 sm:block'>

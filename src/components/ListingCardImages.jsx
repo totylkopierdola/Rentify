@@ -13,7 +13,7 @@ const ListingCardImages = ({ listing }) => {
 
   return (
     <Carousel
-      className='w-full'
+      className='group w-full'
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
       opts={{
