@@ -69,6 +69,11 @@
       --ring: 35.5, 91.7%, 32.9%;
       --star: 39, 89%, 67%;
     }
+    input[type='number']::-webkit-inner-spin-button,
+    input[type='number']::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
   }
 }
 
