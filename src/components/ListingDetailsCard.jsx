@@ -1,14 +1,22 @@
-import { CalendarRange, DollarSign, Pencil, Pin, Users } from 'lucide-react';
+import {
+  CalendarRange,
+  DollarSign,
+  Heart,
+  Pencil,
+  Pin,
+  Users,
+} from 'lucide-react';
 import { Button, Card, Separator } from '@/components/ui';
 import ListingDetailsCardImages from './ListingDetailsCardImages';
 import ListingFavoriteButton from './ListingFavoriteButton';
 import { convertTimestampToDate } from '@/api/helpers';
-import { useEffect } from 'react';
 import { formatDate } from '@/api/helpers';
 import { useAuth } from './AuthProvider';
 import { Link } from 'react-router-dom';
+import useWindowWidth from '@/hooks/useWindowWidth';
 
 const ListingDetailsCard = ({ listing, isEditable }) => {
+  const width = useWindowWidth();
   const availability = {};
   if (listing.dates) {
     availability.from = convertTimestampToDate(listing.dates.from);
@@ -20,23 +28,40 @@ const ListingDetailsCard = ({ listing, isEditable }) => {
 
   return (
     <Card className='mx-auto p-4'>
-      <div className='relative flex items-center '>
+      <div className='relative flex flex-wrap items-center'>
         <h1 className='mb-2 font-bold'>{listing.name}</h1>
-        <div className='flex flex-row'>
-          <ListingFavoriteButton
-            listing={listing}
-            className='z-10 ml-2 h-9 w-9 rounded-full border-none bg-secondary bg-opacity-50 p-2 hover:bg-destructive  hover:bg-opacity-10 '
-          />
-          {/* edit button */}
-          {isCreatedByCurrentUser && (
-            <Link to={`/listings/${listing.id}/edit`}>
-              <Button variant='secondary' className='ml-2 '>
-                Edit Offer
-                <Pencil className='ml-2 h-4 w-4 ' />
+        {width >= 640 && (
+          <div className='flex flex-row'>
+            <ListingFavoriteButton
+              listing={listing}
+              className='z-10 ml-2 h-9 w-9 rounded-full border-none bg-secondary bg-opacity-50 p-2 hover:bg-destructive  hover:bg-opacity-10 '
+            />
+            {isCreatedByCurrentUser && (
+              <Link to={`/listings/${listing.id}/edit`}>
+                <Button variant='secondary' className='ml-2'>
+                  Edit Offer
+                  <Pencil className='ml-2 h-4 w-4 ' />
+                </Button>
+              </Link>
+            )}
+          </div>
+        )}
+        {width < 640 && (
+          <>
+            <br />
+            <div className='flex w-full flex-row gap-2 '>
+              {/* NOT FUNCTIONAL YET */}
+              <Button variant='secondary' className='w-full'>
+                Favorite
+                <Heart className='ml-2 h-4 w-4' />
               </Button>
-            </Link>
-          )}
-        </div>
+              <Button variant='secondary' className='w-full'>
+                Edit Offer
+                <Pencil className='ml-2 h-4 w-4' />
+              </Button>
+            </div>
+          </>
+        )}
       </div>
       <Separator className='my-4' />
 

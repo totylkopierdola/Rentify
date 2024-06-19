@@ -41,21 +41,25 @@ const ListingFilters = ({ onChange, isLoading }) => {
         disabled={isLoading}
       />
 
-      <div className='flex gap-2'>
+      <div className='flex w-full justify-center gap-2'>
         <Stepper
           label='guest'
           value={guests}
           onChange={setGuests}
           disabled={isLoading}
         />
-        <Button className='w-full ' disabled={isLoading} onClick={handleSubmit}>
+        <Button
+          className='w-[78px] max-w-[300px] lg:w-full '
+          disabled={isLoading}
+          onClick={handleSubmit}
+        >
           Search
           <Search className='0 ml-2 h-4 w-4' />
         </Button>
 
         <Button
           onClick={() => handleClearFilters()}
-          className='w-14 lg:w-full '
+          className='lg:w-full '
           variant='secondary'
         >
           Clear

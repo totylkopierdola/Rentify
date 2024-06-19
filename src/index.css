@@ -78,7 +78,8 @@
   }
 
   h1 {
-    @apply mb-4 text-4xl font-bold;
+    @apply mb-4 text-3xl font-bold lg:text-4xl;
+    /* apply for mobiles: */
   }
 
   h2 {

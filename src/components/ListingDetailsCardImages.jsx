@@ -6,9 +6,11 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui';
+import useWindowWidth from '@/hooks/useWindowWidth';
 
 const ListingDetailsCardImages = ({ listing }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const width = useWindowWidth();
 
   if (!listing.images || listing.images.length === 0) {
     return (
@@ -21,7 +23,7 @@ const ListingDetailsCardImages = ({ listing }) => {
   return (
     <>
       <img
-        className='mb-4 h-[500px] w-full rounded-md object-cover'
+        className='mb-4 w-full rounded-md object-cover lg:h-[500px]'
         src={listing.images[currentImageIndex]}
         alt={listing.name}
       />
@@ -36,7 +38,7 @@ const ListingDetailsCardImages = ({ listing }) => {
               isSelected={index === currentImageIndex}
             >
               <img
-                className='h-52 w-full object-cover shadow-sm'
+                className='w-full object-cover shadow-sm lg:h-52'
                 src={image}
                 alt={listing.name}
               />
