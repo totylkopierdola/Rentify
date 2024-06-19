@@ -4,18 +4,17 @@ import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { getStorage } from 'firebase/storage';
 
-import { get } from 'react-hook-form';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 export const firebaseConfig = {
-  apiKey: 'AIzaSyAiXXwdmPZy9OU4wD5jDy9L23-NlbOcOM4',
-  authDomain: 'bookapp-2a36e.firebaseapp.com',
-  projectId: 'bookapp-2a36e',
-  storageBucket: 'bookapp-2a36e.appspot.com',
-  messagingSenderId: '628129418959',
-  appId: '1:628129418959:web:fd6f0a7cfeb30a8c12b1ba',
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 // Initialize Firebase
