@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card, CardContent } from '@/components/ui';
-import { DollarSign, Pencil, Pin, Users } from 'lucide-react';
+import { Button, Card, CardContent } from '@/components/ui';
+import { DollarSign, Pencil, Pin, Users, X } from 'lucide-react';
 import ListingCardImages from '@/components/ListingCardImages';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ListingFavoriteButton from './ListingFavoriteButton';
@@ -21,13 +21,16 @@ const ListingCard = ({ listing }) => {
 
   return (
     <Card className='group w-[320px]'>
-      <Link to={`/listings/${listing.id}`}>
-        <div className='relative'>
-          <ListingFavoriteButton
-            className='absolute right-2 top-2 z-10 h-10 w-10 rounded-full border-none bg-secondary bg-opacity-0 p-2 opacity-0 transition-opacity duration-200 group-hover:bg-secondary group-hover:bg-opacity-50 group-hover:opacity-100'
-            listing={listing}
-          />
+      <div className='relative'>
+        {/* i need X button here to remove the selected listing */}
+        <div
+          className='absolute right-2 top-2 z-10 flex h-6 w-6 items-center rounded-full border-none bg-opacity-0 p-1 transition-all hover:cursor-pointer hover:bg-secondary hover:bg-opacity-80 hover:text-red-500'
+          onClick={() => alert('remove?')}
+        >
+          <X className='h-6 w-6 ' />
         </div>
+      </div>
+      <Link to={`/listings/${listing.id}`}>
         <div className='relative h-[200px] w-full'>
           {isCreatedByCurrentUser && (
             <>
@@ -37,12 +40,14 @@ const ListingCard = ({ listing }) => {
                 </div>
               )}
               {isMyListingsPage && (
-                <div
-                  onClick={handlePencilClick}
-                  className='absolute bottom-2 right-2 z-20 flex h-10 w-10 scale-[0.9] items-center justify-center rounded-md bg-secondary shadow-sm duration-500 hover:scale-100 hover:transition-all'
-                >
-                  <Pencil />
-                </div>
+                <>
+                  <div
+                    onClick={handlePencilClick}
+                    className='absolute bottom-2 right-2 z-20 flex h-10 w-10 scale-[0.9] items-center justify-center rounded-md bg-secondary bg-opacity-80 shadow-sm duration-500 hover:scale-100 hover:transition-all'
+                  >
+                    <Pencil />
+                  </div>
+                </>
               )}
             </>
           )}
