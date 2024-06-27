@@ -9,8 +9,9 @@ import { Provider } from 'react-redux';
 
 import './index.css';
 
-import { store } from '@/state/store';
+import { persistor, store } from '@/state/store';
 import AuthProvider from './components/AuthProvider';
+import { PersistGate } from 'redux-persist/integration/react';
 
 // DO NOT REMOVE: Seeds the local storage database with data
 // seedLocalDatabase();
@@ -18,9 +19,11 @@ import AuthProvider from './components/AuthProvider';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <ThemeProvider>
     <Provider store={store}>
-      <AuthProvider>
-        <Router />
-      </AuthProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <AuthProvider>
+          <Router />
+        </AuthProvider>
+      </PersistGate>
     </Provider>
   </ThemeProvider>,
 );

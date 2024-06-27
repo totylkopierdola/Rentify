@@ -1,10 +1,22 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers } from 'redux';
 import listingsReducer from './listings/listingsSlice';
+import storage from 'redux-persist/lib/storage';
+import { persistReducer, persistStore } from 'redux-persist';
+
+const persistConfig = {
+  key: 'root',
+  storage,
+};
+
+const rootReducer = combineReducers({
+  listings: listingsReducer,
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: {
-    listings: listingsReducer,
-  },
+  reducer: persistedReducer,
 
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -24,3 +36,5 @@ export const store = configureStore({
       }
   */
 });
+
+export const persistor = persistStore(store);
