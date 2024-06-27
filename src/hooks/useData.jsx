@@ -12,8 +12,8 @@ const useData = (filters) => {
       setIsLoading(true);
 
       try {
-        const listings = await getListingDataFromFirestore(filters);
-        setData(listings);
+        const listings = await getListingDataFromFirestore(filters, setData);
+        setData(listings); // Initial set of data
       } catch (error) {
         setError(
           error.message || 'Something went wrong. Please try again later.',

@@ -2,34 +2,28 @@ import { useAuth } from '@/components/AuthProvider';
 import DataRenderer from '@/components/DataRendered';
 import ListingList from '@/components/ListingList';
 import { Separator } from '@/components/ui';
-import { getListings } from '@/state/listings/listingsSlice';
-import React, { useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import useData from '@/hooks/useData'; // Assuming correct path to useData
+import React, { useMemo } from 'react';
 
 const MyListingsPage = () => {
-  const { listings, error, status } = useSelector((state) => state.listings);
-  const userId = useAuth().userLoggedIn.uid;
-  console.log(userId);
-  const [myListings, setMyListings] = useState([]);
+  const { userLoggedIn } = useAuth();
+  const userId = userLoggedIn.uid;
 
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const filters = {
+  // Memoize filters to prevent unnecessary changes
+  const filters = useMemo(
+    () => ({
       createdBy: userId,
-    };
-    dispatch(getListings(filters));
-  }, [userId]);
+    }),
+    [userId],
+  );
 
-  useMemo(() => {
-    setMyListings(listings.filter((listing) => listing.createdBy === userId));
-  }, [listings]);
+  const { data: myListings, error, isLoading } = useData(filters);
 
   return (
     <div className='container py-4'>
       <h1 className='text-center'>My Listings</h1>
       <Separator className='my-4' />
-      <DataRenderer error={error} isLoading={status === 'loading'}>
+      <DataRenderer error={error} isLoading={isLoading}>
         <ListingList listings={myListings} />
       </DataRenderer>
     </div>

@@ -109,7 +109,7 @@ const ListingForm = ({
           )}
         </div>
 
-        <div>
+        {/* <div>
           <Label htmlFor='pictures'>Pictures</Label>
           <Input
             id='pictures'
@@ -123,9 +123,9 @@ const ListingForm = ({
               {errors.images.message}
             </div>
           )}
-        </div>
+        </div> */}
 
-        <div className='relative grid grid-cols-3 gap-2'>
+        {/* <div className='relative grid grid-cols-3 gap-2'>
           {imagePreviews.map((preview, index) => (
             <div key={`${preview}-${index}`} className='relative'>
               <img
@@ -144,7 +144,7 @@ const ListingForm = ({
               />
             </div>
           ))}
-        </div>
+        </div> */}
 
         <div>
           <Label htmlFor='availability'>

@@ -1,5 +1,3 @@
-import { addDays, startOfDay } from 'date-fns';
-import Fuse from 'fuse.js';
 import {
   getFirestore,
   collection,
@@ -11,6 +9,7 @@ import {
   serverTimestamp,
   query,
   updateDoc,
+  onSnapshot,
 } from 'firebase/firestore';
 import db from '../../firebase/firebase';
 import {
@@ -32,7 +31,6 @@ const fetchListingById = async (listingsCollection, listingId) => {
 };
 
 // Function to delete a listing by ID
-
 export const deleteListingById = async (listingId) => {
   try {
     const listingDocRef = doc(listingsCollection, listingId);
@@ -67,7 +65,7 @@ const applyFuzzySearch = (listings, searchTerm) => {
   return fuse.search(searchTerm).map((result) => result.item);
 };
 
-export const getListingDataFromFirestore = async (filtersOrId) => {
+export const getListingDataFromFirestore = async (filtersOrId, setData) => {
   try {
     const listingsCollection = collection(firestore, 'listings');
 
@@ -90,6 +88,17 @@ export const getListingDataFromFirestore = async (filtersOrId) => {
       if (filtersOrId.search) {
         listings = applyFuzzySearch(listings, filtersOrId.search);
       }
+
+      // Subscribe to real-time updates
+      onSnapshot(listingsQuery, (snapshot) => {
+        const updatedListings = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        if (setData) {
+          setData(updatedListings);
+        }
+      });
 
       return listings;
     } else {
@@ -127,4 +136,9 @@ export const updateListingInFirestore = async (listingId, updatedData) => {
   } catch (error) {
     console.error('Error updating listing: ', error);
   }
+};
+
+export const getListingsRef = (filters) => {
+  const listingsCollection = collection(firestore, 'listings');
+  return buildQueryWithFilters(listingsCollection, filters);
 };
