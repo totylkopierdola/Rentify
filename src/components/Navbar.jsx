@@ -137,7 +137,7 @@ const Navbar = ({ userLoggedIn }) => {
                       </Transition>
                     </Menu>
                   )}
-                  {!userLoggedIn && (
+                  {!userLoggedIn && userLoggedIn == undefined && (
                     <div className='flex gap-1'>
                       <Link to='/sign-in'>
                         <Button variant='secondary'>Sign in</Button>
