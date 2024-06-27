@@ -14,15 +14,12 @@ const rentalListingSchema = z.object({
   description: z
     .string()
     .min(10, 'Description must be at least 10 characters long'),
-  images: z.array(z.string()).optional(),
-  location: z.string().min(1, 'Location is required'),
+  // images optional
+  images: z.object(z.string()).optional(),
   maxGuests: z.number().positive('Max guests must be a positive number'),
   name: z.string().min(5, 'Title must be at least 5 characters long'),
   price: z.number().positive('Price must be a positive number'),
-  dates: z.object({
-    from: z.date().optional(),
-    to: z.date().optional(),
-  }),
+  dates: z.object().optional(),
 });
 
 export const useListingForm = (initialData = {}) => {

@@ -10,15 +10,8 @@ import {
 } from '@/components/ui';
 import { Textarea } from './ui/Textarea';
 import { Label } from './ui/Label';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogTrigger,
-} from '@/components/ui/Dialog';
 import { X } from 'lucide-react';
+import ConfirmationDialog from '../components/ConfirmationDialog';
 
 const ListingForm = ({
   title,
@@ -123,6 +116,7 @@ const ListingForm = ({
             type='file'
             multiple
             onChange={handleImageChange}
+            {...register('images')}
           />
           {errors.images && (
             <div className='mt-2 text-sm text-red-500'>
@@ -131,7 +125,6 @@ const ListingForm = ({
           )}
         </div>
 
-        {/* <div className='flex flex-wrap gap-x-4'> */}
         <div className='relative grid grid-cols-3 gap-2'>
           {imagePreviews.map((preview, index) => (
             <div key={`${preview}-${index}`} className='relative'>
@@ -140,35 +133,23 @@ const ListingForm = ({
                 alt={`Preview ${index}`}
                 className='h-full w-full rounded object-cover'
               />
-              <Dialog>
-                <DialogTrigger>
+              <ConfirmationDialog
+                trigger={
                   <X className='absolute right-0 top-0 cursor-pointer shadow-2xl hover:scale-110 hover:text-red-500' />
-                </DialogTrigger>
-                <DialogContent className='w-[90%] lg:w-auto'>
-                  <DialogHeader>
-                    <DialogTitle>Are you sure?</DialogTitle>
-                    <DialogDescription>
-                      Removing image cannot be undone. <br />
-                      This will permanently delete the image from database.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className='flex flex-row justify-center gap-1'>
-                    <Button
-                      variant='destructive'
-                      className='w-full lg:w-40'
-                      onClick={() => removeImagePreview(index)}
-                    >
-                      Remove
-                    </Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
+                }
+                title='Are you sure?'
+                description='Removing image cannot be undone. This will permanently delete the image from database.'
+                confirmLabel='Remove'
+                onConfirm={() => removeImagePreview(index)}
+              />
             </div>
           ))}
         </div>
 
         <div>
-          <Label htmlFor='availability'>Availability</Label>
+          <Label htmlFor='availability'>
+            Availability <span className='font-extralight'>(optional)</span>
+          </Label>
           <DateRangePicker
             id='availability'
             mode='range'

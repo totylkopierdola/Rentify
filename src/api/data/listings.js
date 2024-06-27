@@ -6,6 +6,7 @@ import {
   doc,
   getDoc,
   addDoc,
+  deleteDoc,
   getDocs,
   serverTimestamp,
   query,
@@ -20,6 +21,7 @@ import {
 } from './filterFunctions';
 
 const firestore = db;
+const listingsCollection = collection(firestore, 'listings');
 
 // Fetch a single listing by ID
 const fetchListingById = async (listingsCollection, listingId) => {
@@ -27,6 +29,19 @@ const fetchListingById = async (listingsCollection, listingId) => {
   const listingSnapshot = await getDoc(listingDocRef);
   if (!listingSnapshot.exists()) throw new Error('No such document!');
   return { id: listingSnapshot.id, ...listingSnapshot.data() };
+};
+
+// Function to delete a listing by ID
+
+export const deleteListingById = async (listingId) => {
+  try {
+    const listingDocRef = doc(listingsCollection, listingId);
+    await deleteDoc(listingDocRef);
+    console.log(`Listing with ID ${listingId} has been deleted.`);
+  } catch (error) {
+    console.error('Error deleting listing:', error);
+    throw new Error('Failed to delete the listing!');
+  }
 };
 
 // Build query based on filters
