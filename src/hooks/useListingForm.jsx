@@ -14,19 +14,16 @@ const rentalListingSchema = z.object({
   description: z
     .string()
     .min(10, 'Description must be at least 10 characters long'),
-  // images: z.array(z.string()).optional(), // Ensure it is an array of strings
-  // images: z.array(z.any()).optional(),
-  images: z.array(z.string().optional()).optional(),
+  // images: z.array(z.string()).optional(),
+  // images: z.optional(),
   location: z.string().min(1, 'Location is required'),
   maxGuests: z.number().positive('Max guests must be a positive number'),
   name: z.string().min(5, 'Title must be at least 5 characters long'),
   price: z.number().positive('Price must be a positive number'),
-  dates: z
-    .object({
-      from: z.date().optional(),
-      to: z.date().optional(),
-    })
-    .optional(),
+  dates: z.object({
+    from: z.date().optional(),
+    to: z.date().optional(),
+  }),
 });
 
 export const useListingForm = (initialData = {}) => {
@@ -50,16 +47,8 @@ export const useListingForm = (initialData = {}) => {
   });
 
   const handleImageChange = (e) => {
-    console.log('File input changed');
-
     const newFiles = Array.from(e.target.files);
-    console.log('newFiles:', newFiles);
-
-    setFiles((prevFiles) => {
-      const updatedFiles = [...prevFiles, ...newFiles];
-      console.log('Updated files state:', updatedFiles);
-      return updatedFiles;
-    });
+    setFiles((prevFiles) => [...prevFiles, ...newFiles]);
 
     const newPreviews = [];
     newFiles.forEach((file) => {
@@ -67,19 +56,7 @@ export const useListingForm = (initialData = {}) => {
       reader.onloadend = () => {
         newPreviews.push(reader.result);
         if (newPreviews.length === newFiles.length) {
-          console.log('New previews before setting state:', newPreviews);
-          setImagePreviews((prevPreviews) => {
-            const updatedPreviews = [...prevPreviews, ...newPreviews];
-            console.log('Updated imagePreviews state:', updatedPreviews);
-            return updatedPreviews;
-          });
-          const currentImages = getValues('images') || [];
-          console.log(
-            'Current form images before setting new value:',
-            currentImages,
-          );
-          setValue('images', [...currentImages, ...newPreviews]);
-          console.log('Form values after setting new images:', getValues());
+          setImagePreviews((prevPreviews) => [...prevPreviews, ...newPreviews]);
         }
       };
       reader.readAsDataURL(file);
@@ -126,7 +103,6 @@ export const useListingForm = (initialData = {}) => {
       setCreateListingError(error.message);
     }
   };
-
   return {
     createListingError,
     imagePreviews,
