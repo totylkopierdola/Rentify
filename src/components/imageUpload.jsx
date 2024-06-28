@@ -1,3 +1,7 @@
+import { X } from 'lucide-react';
+import { Input } from './ui/Input';
+import { Label } from './ui/Label';
+
 const ImageUpload = ({ onChange, previews }) => {
   const handleImageChange = (e) => {
     const newFiles = Array.from(e.target.files);
@@ -26,3 +30,5 @@ const ImageUpload = ({ onChange, previews }) => {
     </div>
   );
 };
+
+export default ImageUpload;

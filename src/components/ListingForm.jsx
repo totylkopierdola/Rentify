@@ -109,23 +109,32 @@ const ListingForm = ({
           )}
         </div>
 
-        {/* <div>
+        <div>
           <Label htmlFor='pictures'>Pictures</Label>
           <Input
             id='pictures'
             type='file'
             multiple
-            onChange={handleImageChange}
-            {...register('images')}
+            onChange={(e) => {
+              handleImageChange(e);
+              console.log('Image input changed');
+            }}
+            {...register('images', {
+              onChange: handleImageChange,
+            })}
           />
+          {/* on click log uploaded images */}
+          <button type='button' onClick={() => console.log(imagePreviews)}>
+            log
+          </button>
           {errors.images && (
             <div className='mt-2 text-sm text-red-500'>
               {errors.images.message}
             </div>
           )}
-        </div> */}
+        </div>
 
-        {/* <div className='relative grid grid-cols-3 gap-2'>
+        <div className='relative grid grid-cols-3 gap-2'>
           {imagePreviews.map((preview, index) => (
             <div key={`${preview}-${index}`} className='relative'>
               <img
@@ -144,7 +153,7 @@ const ListingForm = ({
               />
             </div>
           ))}
-        </div> */}
+        </div>
 
         <div>
           <Label htmlFor='availability'>
